@@ -1,5 +1,11 @@
 import { GasMix, Warning } from './types';
 
+/**
+ * Validates a gas mix to ensure that the percentages of O₂ and He are within acceptable limits.
+ *
+ * @param mix - The gas mix to validate, containing percentages of O₂ and He.
+ * @returns An array of warnings, which may include errors if the mix is invalid.
+ */
 export function validateMix(mix: GasMix): Warning[] {
   const warnings: Warning[] = [];
 

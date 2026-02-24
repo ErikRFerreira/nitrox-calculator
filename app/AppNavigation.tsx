@@ -3,14 +3,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // Screens
 import CalculatorScreen from '../screens/CalculatorScreen';
-import LabelScreen from '../screens/LabelScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import LearnScreen from '../screens/LearnScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 export type RootStackParamList = {
   Calculator: undefined;
-  Label: undefined;
   History: undefined;
   Learn: undefined;
   Settings: undefined;
@@ -33,7 +31,6 @@ function AppNavigation() {
         }}
       >
         <Tab.Screen name="Calculator" component={CalculatorScreen} />
-        <Tab.Screen name="Label" component={LabelScreen} />
         <Tab.Screen name="History" component={HistoryScreen} />
         <Tab.Screen name="Learn" component={LearnScreen} />
         <Tab.Screen name="Settings" component={SettingsScreen} />

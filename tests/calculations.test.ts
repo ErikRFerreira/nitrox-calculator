@@ -1,5 +1,5 @@
 import { calculateMOD, metersToFeet } from '../domain/gas/calculations';
-import { validateMix } from '../domain/gas/validator';
+import { validateMix } from '../domain/gas/validators';
 
 describe('Gas domain', () => {
   describe('validateMix', () => {
@@ -7,9 +7,7 @@ describe('Gas domain', () => {
     test('returns an error when O2 + He is greater than 100', () => {
       const warnings = validateMix({ o2: 70, he: 40 });
       expect(warnings).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({ type: 'error' }),
-        ]),
+        expect.arrayContaining([expect.objectContaining({ type: 'error' })]),
       );
     });
 
@@ -17,9 +15,7 @@ describe('Gas domain', () => {
     test('returns an error when O2 is negative', () => {
       const warnings = validateMix({ o2: -1, he: 20 });
       expect(warnings).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({ type: 'error' }),
-        ]),
+        expect.arrayContaining([expect.objectContaining({ type: 'error' })]),
       );
     });
 
@@ -34,13 +30,13 @@ describe('Gas domain', () => {
     // Common recreational nitrox reference values.
     test('returns expected MOD for EAN32 at ppO2 1.4', () => {
       const mod = calculateMOD({ o2: 32, he: 0 }, 1.4);
-      expect(mod).toBeCloseTo(33.75, 2);
+      expect(mod).toBe(33.8);
     });
 
     // Higher oxygen mixes produce a shallower MOD.
     test('returns expected MOD for EAN36 at ppO2 1.4', () => {
       const mod = calculateMOD({ o2: 36, he: 0 }, 1.4);
-      expect(mod).toBeCloseTo(28.89, 2);
+      expect(mod).toBe(28.9);
     });
 
     // A zero-oxygen input is invalid for MOD and is clamped to 0.
@@ -59,12 +55,17 @@ describe('Gas domain', () => {
   describe('metersToFeet', () => {
     // Sanity check against the standard meters-to-feet conversion.
     test('converts meters to feet', () => {
-      expect(metersToFeet(10)).toBeCloseTo(32.8084, 4);
+      expect(metersToFeet(10)).toBe(32.8);
     });
 
     // Surface depth should stay zero after conversion.
     test('returns 0 for 0 meters', () => {
       expect(metersToFeet(0)).toBe(0);
+    });
+
+    // Values are rounded to one decimal place.
+    test('rounds non-integer conversion to one decimal', () => {
+      expect(metersToFeet(1)).toBe(3.3);
     });
   });
 });
