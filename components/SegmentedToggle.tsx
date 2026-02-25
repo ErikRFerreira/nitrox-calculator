@@ -24,10 +24,10 @@ function SegmentedToggle<T extends string | number>({
           <TouchableOpacity
             key={String(opt.value)}
             onPress={() => onChange(opt.value)}
-            className={`flex-1 py-3 rounded-lg ${active ? 'bg-zinc-800' : ''}`}
+            className={`flex-1 py-2 rounded-lg ${active ? 'bg-zinc-800' : ''}`}
           >
             <Text
-              className={`text-center font-bold ${active ? 'text-white' : 'text-zinc-400'}`}
+              className={`text-center text-sm font-bold ${active ? 'text-white' : 'text-zinc-400'}`}
             >
               {opt.label}
             </Text>

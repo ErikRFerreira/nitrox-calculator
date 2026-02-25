@@ -1,4 +1,8 @@
-import { calculateMOD, metersToFeet } from '../domain/gas/calculations';
+import {
+  calculateEND,
+  calculateMOD,
+  metersToFeet,
+} from '../domain/gas/calculations';
 import { validateMix } from '../domain/gas/validators';
 
 describe('Gas domain', () => {
@@ -30,13 +34,13 @@ describe('Gas domain', () => {
     // Common recreational nitrox reference values.
     test('returns expected MOD for EAN32 at ppO2 1.4', () => {
       const mod = calculateMOD({ o2: 32, he: 0 }, 1.4);
-      expect(mod).toBe(33.8);
+      expect(mod).toBeCloseTo(33.75, 2);
     });
 
     // Higher oxygen mixes produce a shallower MOD.
     test('returns expected MOD for EAN36 at ppO2 1.4', () => {
       const mod = calculateMOD({ o2: 36, he: 0 }, 1.4);
-      expect(mod).toBe(28.9);
+      expect(mod).toBeCloseTo(28.8889, 3);
     });
 
     // A zero-oxygen input is invalid for MOD and is clamped to 0.
@@ -50,12 +54,20 @@ describe('Gas domain', () => {
       const mod = calculateMOD({ o2: 36, he: 0 }, 0.3);
       expect(mod).toBe(0);
     });
+
+    // Trimix with helium should have a deeper MOD than an equivalent nitrox.
+    test('END is lower than depth for trimix', () => {
+      // Example: Tx21/35 at 40m should have END < 40m
+      const end = calculateEND({ o2: 21, he: 35 }, 40);
+      expect(end).toBeLessThan(40);
+      expect(end).toBeGreaterThan(0);
+    });
   });
 
   describe('metersToFeet', () => {
     // Sanity check against the standard meters-to-feet conversion.
     test('converts meters to feet', () => {
-      expect(metersToFeet(10)).toBe(32.8);
+      expect(metersToFeet(10)).toBeCloseTo(32.8084, 4);
     });
 
     // Surface depth should stay zero after conversion.
@@ -63,9 +75,9 @@ describe('Gas domain', () => {
       expect(metersToFeet(0)).toBe(0);
     });
 
-    // Values are rounded to one decimal place.
-    test('rounds non-integer conversion to one decimal', () => {
-      expect(metersToFeet(1)).toBe(3.3);
+    // Conversion preserves fractional precision.
+    test('returns precise conversion for non-integer result', () => {
+      expect(metersToFeet(1)).toBeCloseTo(3.28084, 5);
     });
   });
 });
