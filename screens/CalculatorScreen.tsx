@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+import { CalculatorStackParamList } from '../app/CalculatorStack';
 
 import MODview from '../components/MODview';
 import PresetChips from '../components/PresetChips';
@@ -20,7 +23,13 @@ import {
 import { validateMix } from '../domain/gas/validators';
 import ENDview from '../components/ENDview';
 
+type Nav = NativeStackNavigationProp<
+  CalculatorStackParamList,
+  'CalculatorMain'
+>;
+
 function CalculatorScreen() {
+  const navigation = useNavigation<Nav>();
   const [o2, setO2] = useState(DEFAULT_O2);
   const [he, setHe] = useState(DEFAULT_HE);
   const [ppO2, setPpO2] = useState(DEFAULT_PPO2);
@@ -32,6 +41,7 @@ function CalculatorScreen() {
 
   const modMeters = hasError ? null : calculateMOD(mix, ppO2);
   const modFeet = modMeters === null ? null : metersToFeet(modMeters);
+  const effectiveHe = isTrimix ? he : 0;
 
   const endMeters =
     !hasError && isTrimix && modMeters !== null
@@ -148,6 +158,25 @@ function CalculatorScreen() {
           {!hasError && <ENDview endMeters={endMeters} />}
         </>
       )}
+
+      <TouchableOpacity
+        onPress={() => {
+          if (hasError) return;
+
+          navigation.navigate('Label', {
+            o2,
+            he: effectiveHe,
+            modMeters: modMeters ?? undefined,
+            endMeters: isTrimix ? (endMeters ?? undefined) : undefined,
+          });
+        }}
+        disabled={hasError}
+        className={`mt-6 rounded-2xl p-4 items-center ${
+          hasError ? 'bg-zinc-800' : 'bg-[#0493c6]/80'
+        }`}
+      >
+        <Text className="text-white font-semibold text-lg">View Label</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 }

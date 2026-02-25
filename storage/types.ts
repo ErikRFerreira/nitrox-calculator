@@ -1,6 +1,8 @@
 export type HistoryEntry = {
   id: string;
-  createdAt: string; // ISO string
+  createdAt: string;
+  diverName?: string;
+  notes?: string;
   o2: number;
   he: number;
   ppO2: number;

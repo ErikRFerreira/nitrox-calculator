@@ -1,13 +1,111 @@
-import { View, Text } from 'react-native';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { Text, View } from 'react-native';
+import { CalculatorStackParamList } from '../app/CalculatorStack';
+import { Feather } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
+type LabelRoute = RouteProp<CalculatorStackParamList, 'Label'>;
 function LabelScreen() {
+  const route = useRoute<LabelRoute>();
+  const { o2, he, modMeters, endMeters } = route.params;
+  const navigation = useNavigation();
+
+  // Format date as 'dd/mm/yy'
+  const date = new Date();
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = String(date.getFullYear()).slice(-2);
+  const formattedDate = `${day}/${month}/${year}`;
+
+  // Format gas mix
+  let mixDisplay = '';
+  if (he > 0) {
+    mixDisplay = `Tx${o2}/${he}`;
+  } else {
+    mixDisplay = `${o2}%`;
+  }
+
   return (
     <View className="flex-1 bg-zinc-950 p-6">
-      <Text className="text-white text-2xl font-bold">Label</Text>
-      <Text className="text-zinc-400 mt-2">
-        This is a where the nitrox label will be generated. It will have the
-        same info as the calculator screen, but in a more compact format.
-      </Text>
+      <View className="mt-4 mb-6 flex-row items-center justify-between">
+        {/* Left: Feather icon */}
+        <View style={{ width: 40, alignItems: 'flex-start' }}>
+          <TouchableOpacity onPress={() => navigation.goBack()} className="p-2">
+            <Feather name="arrow-left" size={24} color="white" />
+          </TouchableOpacity>
+        </View>
+        {/* Center: Title */}
+        <View style={{ flex: 1, alignItems: 'center' }}>
+          <Text className="text-2xl text-white font-bold">Tank Label</Text>
+        </View>
+        {/* Right: Empty for symmetry */}
+        <View style={{ width: 40 }} />
+      </View>
+      <View className="bg-zinc-300 border border-blue-200 rounded-2xl px-6 py-7 shadow-sm">
+        {/* Row 1: Name & Date */}
+        <View className="flex-row justify-between items-center mb-6">
+          {/* Name */}
+          <View className="flex-1 mr-2">
+            <Text className="text-xs text-blue-500 tracking-widest mb-1">
+              NAME
+            </Text>
+            <Text className="text-zinc-900 text-xl font-bold">Your Name</Text>
+          </View>
+          {/* Date */}
+          <View className="flex-1 ml-2 items-end">
+            <Text className="text-xs text-blue-500 tracking-widest mb-1">
+              DATE
+            </Text>
+            <Text className="text-zinc-900 text-xl font-bold">
+              {formattedDate}
+            </Text>
+          </View>
+        </View>
+
+        {/* Row 2: % Mix & MOD */}
+        <View className="flex-row justify-between items-center mb-6">
+          {/* % Mix or Trimix */}
+          <View className="flex-1 mr-2">
+            <Text className="text-xs text-blue-500 tracking-widest mb-1">
+              % MIX
+            </Text>
+            <Text className="text-xl font-extrabold text-zinc-900">
+              {mixDisplay}
+            </Text>
+          </View>
+          {/* MOD */}
+          <View className="flex-1 ml-2 items-end">
+            <Text className="text-xs text-blue-500 tracking-widest mb-1">
+              MOD
+            </Text>
+            <Text className="text-zinc-900 text-xl font-extrabold">
+              {modMeters?.toFixed(1)} m
+            </Text>
+          </View>
+        </View>
+
+        {/* Row 3: END (if present) */}
+        {endMeters !== undefined && (
+          <View className="flex-row justify-between items-center mb-2">
+            <View className="flex-1 mr-2">
+              <Text className="text-xs text-blue-500 tracking-widest mb-1">
+                END
+              </Text>
+              <Text className="text-zinc-900 text-xl font-extrabold">
+                {endMeters?.toFixed(1)} m
+              </Text>
+            </View>
+            <View className="flex-1 ml-2" />
+          </View>
+        )}
+      </View>
+
+      <View className="mt-6 w-full flex-row items-center justify-center rounded-full border border-amber-600/35 bg-amber-950/30 px-4 py-3">
+        <Text className="text-sm leading-6 font-semibold uppercase tracking-wide text-amber-500 text-center">
+          ! Always verify your gas content with an analyzer before diving
+        </Text>
+      </View>
     </View>
   );
 }

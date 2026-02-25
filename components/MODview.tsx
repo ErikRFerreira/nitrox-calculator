@@ -20,7 +20,7 @@ function MODview({ modMeters, modFeet, hasError, ppO2 }: Props) {
 
   useEffect(() => {
     pulse.value = withRepeat(
-      withTiming(1, { duration: 600, easing: Easing.inOut(Easing.ease) }),
+      withTiming(1, { duration: 900, easing: Easing.inOut(Easing.ease) }),
       -1,
       true,
     );
@@ -89,9 +89,9 @@ function MODview({ modMeters, modFeet, hasError, ppO2 }: Props) {
       </Text>
 
       {ppO2 === 1.6 && (
-        <View className="mt-6 w-full flex-row items-center justify-center rounded-full border border-amber-600/35 bg-amber-950/30 px-4 py-2">
+        <View className="mt-6 w-full flex-row items-center justify-center rounded-full border border-amber-600/35 bg-amber-950/30 px-2 py-2">
           <Text className="mr-2 text-base text-amber-500">!</Text>
-          <Text className="text-[8px] font-bold uppercase tracking-wide text-amber-500">
+          <Text className="text-[8px] font-semibold uppercase tracking-wide text-amber-500">
             Typically used for contingency or decompression
           </Text>
         </View>
