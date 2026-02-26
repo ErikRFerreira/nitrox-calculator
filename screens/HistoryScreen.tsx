@@ -6,6 +6,8 @@ import { TouchableOpacity } from 'react-native';
 
 import { deleteHistoryEntry, getHistory } from '../storage/historyStorage';
 import { HistoryEntry } from '../storage/types';
+import { useSettings } from '../storage/useSettings';
+import { formatDepth } from '../utils/units';
 
 type FilterType = 'all' | 'nitrox' | 'trimix';
 
@@ -58,6 +60,7 @@ function getMixTitle(entry: HistoryEntry): string {
 }
 
 function HistoryScreen() {
+  const { settings } = useSettings();
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
   const [filter, setFilter] = useState<FilterType>('all');
 
@@ -151,7 +154,7 @@ function HistoryScreen() {
   };
 
   return (
-    <View className="flex-1 bg-zinc-950 px-4 pb-4 pt-10">
+    <View className="flex-1 px-4 pb-4 pt-10">
       <Text className="text-center text-2xl font-bold mt-2 text-white">
         History
       </Text>
@@ -179,6 +182,9 @@ function HistoryScreen() {
           </Text>
         )}
         renderItem={({ item }) => {
+          const formattedMod = item.modMeters !== undefined
+            ? formatDepth(item.modMeters, settings.units)
+            : null;
           const isTrimix = item.he > 0;
           const mixTypeLabel = isTrimix ? 'TRIMIX' : 'NITROX';
           const borderColor = isTrimix
@@ -228,10 +234,12 @@ function HistoryScreen() {
                   </View>
                   <View className="mt-2 flex-row items-baseline">
                     <Text className="text-3xl font-bold text-cyan-400">
-                      {item.modMeters?.toFixed(1) ?? '--'}
+                      {formattedMod?.primary ?? '--'}
                     </Text>
-                    <Text className="mb-1 ml-1 text-xl text-zinc-400">m</Text>
                   </View>
+                  <Text className="mt-1 text-xs text-zinc-500">
+                    {formattedMod?.secondary}
+                  </Text>
                 </View>
                 <View>
                   <TouchableOpacity

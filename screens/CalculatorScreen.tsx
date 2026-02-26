@@ -10,6 +10,7 @@ import SegmentedToggle from '../components/SegmentedToggle';
 import StepperInput from '../components/StepperInput';
 import SwitchCard from '../components/SwitchCard';
 import { calculateEND, calculateMOD } from '../domain/gas/calculations';
+import { useSettings } from '../storage/useSettings';
 
 import {
   DEFAULT_HE,
@@ -27,6 +28,7 @@ type Nav = NativeStackNavigationProp<
 
 function CalculatorScreen() {
   const navigation = useNavigation<Nav>();
+  const { settings } = useSettings();
   const [o2, setO2] = useState(DEFAULT_O2);
   const [he, setHe] = useState(DEFAULT_HE);
   const [ppO2, setPpO2] = useState(DEFAULT_PPO2);
@@ -66,7 +68,7 @@ function CalculatorScreen() {
 
   return (
     <ScrollView
-      className="flex-1 bg-zinc-950"
+      className="flex-1"
       contentContainerStyle={{ flexGrow: 1, padding: 24, paddingBottom: 40 }}
       showsVerticalScrollIndicator={false}
     >
@@ -83,6 +85,7 @@ function CalculatorScreen() {
         modMeters={modMeters}
         hasError={hasError}
         ppO2={ppO2}
+        units={settings.units}
       />
 
       {hasError && (
@@ -150,7 +153,7 @@ function CalculatorScreen() {
             }}
           />
 
-          {!hasError && <ENDview endMeters={endMeters} />}
+          {!hasError && <ENDview endMeters={endMeters} units={settings.units} />}
         </>
       )}
 

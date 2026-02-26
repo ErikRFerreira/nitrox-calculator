@@ -20,6 +20,7 @@ export default function CalculatorStack() {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
+        contentStyle: { backgroundColor: 'transparent' },
       }}
     >
       <Stack.Screen name="CalculatorMain" component={CalculatorScreen} />

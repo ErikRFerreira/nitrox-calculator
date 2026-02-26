@@ -1,3 +1,5 @@
+import { Units } from '../domain/gas/types';
+
 /**
  * Converts meters to feet.
  *
@@ -15,7 +17,7 @@ export function metersToFeet(meters: number): number {
  * @param units - The unit system to use for formatting ('metric' or 'imperial').
  * @returns - An object containing the primary and secondary formatted depth strings.
  */
-export function formatDepth(meters: number, units: 'metric' | 'imperial') {
+export function formatDepth(meters: number, units: Units) {
   if (units === 'imperial') {
     return {
       primary: `${metersToFeet(meters).toFixed(0)} ft`,

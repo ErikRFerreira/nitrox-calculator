@@ -1,12 +1,11 @@
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather } from '@expo/vector-icons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 
 // Screens
 import HistoryScreen from '../screens/HistoryScreen';
 import LearnScreen from '../screens/LearnScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-
 // Stacks
 import CalculatorStack from './CalculatorStack';
 
@@ -33,11 +32,13 @@ function AppNavigation() {
       <Tab.Navigator
         screenOptions={{
           headerShown: false,
+          sceneStyle: { backgroundColor: 'transparent' },
           tabBarStyle: {
             backgroundColor: '#09090b',
             borderTopColor: '#18181b',
+            borderTopWidth: 1,
           },
-          tabBarActiveTintColor: '#2EC4B6',
+          tabBarActiveTintColor: '#33C4E3',
           tabBarInactiveTintColor: '#71717a',
         }}
       >

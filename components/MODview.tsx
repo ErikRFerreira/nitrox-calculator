@@ -1,7 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
-import { formatDepth } from '../utils/units';
-import { getSettings } from '../storage/settingsStorage';
+import { useEffect } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -9,32 +7,28 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
+import { LinearGradient } from 'expo-linear-gradient';
+
+import { Units } from '../domain/gas/types';
+import { formatDepth } from '../utils/units';
 
 type Props = {
   modMeters: number | null;
   hasError: boolean;
   ppO2: number;
+  units: Units;
 };
 
-function MODview({ modMeters, hasError, ppO2 }: Props) {
+function MODview({ modMeters, hasError, ppO2, units }: Props) {
   const pulse = useSharedValue(0);
-  const [units, setUnits] = useState<'metric' | 'imperial'>('metric');
 
   useEffect(() => {
     pulse.value = withRepeat(
-      withTiming(1, { duration: 1200, easing: Easing.inOut(Easing.ease) }),
+      withTiming(1, { duration: 1500, easing: Easing.inOut(Easing.ease) }),
       -1,
       true,
     );
   }, [pulse]);
-
-  useEffect(() => {
-    const load = async () => {
-      const s = await getSettings();
-      setUnits(s.units);
-    };
-    load();
-  }, []);
 
   const numberGlowStyle = useAnimatedStyle(() => {
     const shouldGlow = !hasError && modMeters !== null;
@@ -79,7 +73,7 @@ function MODview({ modMeters, hasError, ppO2 }: Props) {
 
   return (
     <View
-      className="mt-4 items-center overflow-hidden rounded-[32px] border border-[#0b2743] bg-[#02070d] px-6 py-10"
+      className="mt-4 overflow-hidden rounded-[32px] border border-[#0b2743]"
       style={{
         shadowColor: '#0d8fbd',
         shadowOpacity: 0.2,
@@ -87,46 +81,54 @@ function MODview({ modMeters, hasError, ppO2 }: Props) {
         elevation: 6,
       }}
     >
-      <Text className="mb-6 text-xs font-bold uppercase tracking-[4px] text-[#0493c6]">
-        Max Operating Depth
-      </Text>
-
-      <View className="flex-row items-end justify-center">
-        <View className="relative items-center justify-center">
-          <Animated.Text
-            style={glowLayerStyle}
-            className={`absolute text-[92px] font-extrabold leading-[96px] tracking-tight ${hasError ? 'text-zinc-600' : 'text-[#0493c6]'}`}
-          >
-            {modLabel}
-          </Animated.Text>
-          <Animated.Text
-            style={numberGlowStyle}
-            className={`text-[92px] font-extrabold leading-[96px] tracking-tight ${hasError ? 'text-zinc-600' : 'text-zinc-100'}`}
-          >
-            {modLabel}
-          </Animated.Text>
-        </View>
-        <Text
-          className={`ml-2 mb-3 text-6xl font-semibold ${hasError ? 'text-zinc-700' : 'text-[#0493c6]'}`}
-        >
-          {modUnit}
+      <LinearGradient
+        colors={['#07101a', '#02070d']}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
+        style={StyleSheet.absoluteFillObject}
+      />
+      <View className="items-center px-6 py-10">
+        <Text className="mb-6 text-xs font-bold uppercase tracking-[4px] text-[#0493c6]">
+          Max Operating Depth
         </Text>
-      </View>
 
-      <Text
-        className={`${hasError ? 'text-zinc-700' : 'text-slate-500'} mt-2 text-2xl`}
-      >
-        {modSecondaryLabel}
-      </Text>
-
-      {ppO2 === 1.6 && (
-        <View className="mt-6 w-full flex-row items-center justify-center rounded-full border border-amber-600/35 bg-amber-950/30 px-2 py-2">
-          <Text className="mr-2 text-base text-amber-500">!</Text>
-          <Text className="text-[8px] font-semibold uppercase tracking-wide text-amber-500">
-            Typically used for contingency or decompression
+        <View className="flex-row items-end justify-center">
+          <View className="relative items-center justify-center">
+            <Animated.Text
+              style={glowLayerStyle}
+              className={`absolute text-[92px] font-extrabold leading-[96px] tracking-tight ${hasError ? 'text-zinc-600' : 'text-[#0493c6]'}`}
+            >
+              {modLabel}
+            </Animated.Text>
+            <Animated.Text
+              style={numberGlowStyle}
+              className={`text-[92px] font-extrabold leading-[96px] tracking-tight ${hasError ? 'text-zinc-600' : 'text-zinc-100'}`}
+            >
+              {modLabel}
+            </Animated.Text>
+          </View>
+          <Text
+            className={`ml-2 mb-3 text-6xl font-semibold ${hasError ? 'text-zinc-700' : 'text-[#0493c6]'}`}
+          >
+            {modUnit}
           </Text>
         </View>
-      )}
+
+        <Text
+          className={`${hasError ? 'text-zinc-700' : 'text-slate-500'} mt-2 text-2xl`}
+        >
+          {modSecondaryLabel}
+        </Text>
+
+        {ppO2 === 1.6 && (
+          <View className="mt-6 w-full flex-row items-center justify-center rounded-full border border-amber-600/35 bg-amber-950/30 px-2 py-2">
+            <Text className="mr-2 text-base text-amber-500">!</Text>
+            <Text className="text-[8px] font-semibold uppercase tracking-wide text-amber-500">
+              Typically used for contingency or decompression
+            </Text>
+          </View>
+        )}
+      </View>
     </View>
   );
 }

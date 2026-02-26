@@ -7,7 +7,7 @@ export type Settings = {
 
 const KEY = 'settings:v1';
 
-const DEFAULTS: Settings = {
+export const DEFAULT_SETTINGS: Settings = {
   units: 'metric',
   userName: '',
 };
@@ -19,12 +19,12 @@ const DEFAULTS: Settings = {
  */
 export async function getSettings(): Promise<Settings> {
   const raw = await AsyncStorage.getItem(KEY);
-  if (!raw) return DEFAULTS;
+  if (!raw) return DEFAULT_SETTINGS;
 
   try {
-    return { ...DEFAULTS, ...(JSON.parse(raw) as Partial<Settings>) };
+    return { ...DEFAULT_SETTINGS, ...(JSON.parse(raw) as Partial<Settings>) };
   } catch {
-    return DEFAULTS;
+    return DEFAULT_SETTINGS;
   }
 }
 

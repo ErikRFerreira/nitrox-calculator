@@ -3,38 +3,24 @@ import { Alert, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import SegmentedToggle from '../components/SegmentedToggle';
 import { clearHistory } from '../storage/historyStorage';
-import {
-  getSettings,
-  saveSettings,
-  Settings,
-} from '../storage/settingsStorage';
+import { useSettings } from '../storage/useSettings';
 
 function SettingsScreen() {
-  const [settings, setSettings] = useState<Settings>({
-    units: 'metric',
-    userName: '',
-  });
-
+  const { settings, updateSettings } = useSettings();
   const [draftName, setDraftName] = useState('');
 
   useEffect(() => {
-    const load = async () => {
-      const s = await getSettings();
-      setSettings(s);
-      setDraftName(s.userName);
-    };
-    load();
-  }, []);
+    setDraftName(settings.userName);
+  }, [settings.userName]);
 
   const saveName = async () => {
     const next = { ...settings, userName: draftName.trim() };
-    setSettings(next);
-    await saveSettings(next);
+    await updateSettings(next);
     Alert.alert('Saved', 'Your name was updated.');
   };
 
   return (
-    <View className="flex-1 bg-zinc-950 p-6">
+    <View className="flex-1 p-6">
       <Text className="text-center text-2xl font-bold mt-6 text-white">
         Settings
       </Text>
@@ -67,7 +53,10 @@ function SettingsScreen() {
           { label: 'Imperial', value: 'imperial' },
         ]}
         value={settings.units}
-        onChange={(units) => setSettings({ ...settings, units })}
+        onChange={(units) => {
+          const next = { ...settings, units };
+          void updateSettings(next);
+        }}
       />
 
       <View className="mt-10">

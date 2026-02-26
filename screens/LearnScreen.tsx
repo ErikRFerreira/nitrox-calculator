@@ -2,7 +2,7 @@ import { Text, View } from 'react-native';
 
 function LearnScreen() {
   return (
-    <View className="flex-1 bg-zinc-950 p-6">
+    <View className="flex-1 p-6">
       <Text className="text-center text-2xl font-bold mt-6 text-white">
         Learn
       </Text>

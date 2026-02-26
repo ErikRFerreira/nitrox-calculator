@@ -1,20 +1,25 @@
 import { Feather } from '@expo/vector-icons';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 
 import { CalculatorStackParamList } from '../app/CalculatorStack';
+import { formatDepth } from '../utils/units';
 import { addHistoryEntry } from '../storage/historyStorage';
-import { getSettings } from '../storage/settingsStorage';
+import { useSettings } from '../storage/useSettings';
 
 type LabelRoute = RouteProp<CalculatorStackParamList, 'Label'>;
 function LabelScreen() {
-  const [diverName, setDiverName] = useState('');
+  const { settings } = useSettings();
   const route = useRoute<LabelRoute>();
   const { o2, he, ppO2, modMeters, endMeters } = route.params;
   const navigation = useNavigation();
+  const diverName = settings.userName || 'Your Name';
+  const formattedMod =
+    modMeters !== undefined ? formatDepth(modMeters, settings.units) : null;
+  const formattedEnd =
+    endMeters !== undefined ? formatDepth(endMeters, settings.units) : null;
 
   // Format date as 'dd/mm/yy'
   const date = new Date();
@@ -31,19 +36,8 @@ function LabelScreen() {
     mixDisplay = `${o2}%`;
   }
 
-  // Load diver name from settings
-  useEffect(() => {
-    const load = async () => {
-      const s = await getSettings();
-      if (!diverName) {
-        setDiverName(s.userName || 'Your Name');
-      }
-    };
-    load();
-  }, []);
-
   return (
-    <View className="flex-1 bg-zinc-950 p-6">
+    <View className="flex-1 p-6">
       <View className="mt-4 mb-6 flex-row items-center justify-between">
         {/* Left: Feather icon */}
         <View style={{ width: 40, alignItems: 'flex-start' }}>
@@ -57,6 +51,12 @@ function LabelScreen() {
         </View>
         {/* Right: Empty for symmetry */}
         <View style={{ width: 40 }} />
+      </View>
+      <View className="mb-4">
+        <Text className="text-zinc-400 text-center">
+          General instructions on how to mark your tank label with the gas
+          analysis results: Name, Date, Mix %, MOD, and END (if applicable).
+        </Text>
       </View>
       <View className="bg-zinc-300 border border-blue-200 rounded-2xl px-6 py-7 shadow-sm">
         {/* Row 1: Name & Date */}
@@ -84,7 +84,7 @@ function LabelScreen() {
           {/* % Mix or Trimix */}
           <View className="flex-1 mr-2">
             <Text className="text-xs text-blue-500 tracking-widest mb-1">
-              % MIX
+              MIX %
             </Text>
             <Text className="text-xl font-extrabold text-zinc-900">
               {mixDisplay}
@@ -96,7 +96,10 @@ function LabelScreen() {
               MOD
             </Text>
             <Text className="text-zinc-900 text-xl font-extrabold">
-              {modMeters?.toFixed(1)} m
+              {formattedMod?.primary ?? '--'}
+            </Text>
+            <Text className="text-xs text-zinc-500">
+              {formattedMod?.secondary}
             </Text>
           </View>
         </View>
@@ -109,7 +112,10 @@ function LabelScreen() {
                 END
               </Text>
               <Text className="text-zinc-900 text-xl font-extrabold">
-                {endMeters?.toFixed(1)} m
+                {formattedEnd?.primary ?? '--'}
+              </Text>
+              <Text className="text-xs text-zinc-500">
+                {formattedEnd?.secondary}
               </Text>
             </View>
             <View className="flex-1 ml-2" />
@@ -128,7 +134,7 @@ function LabelScreen() {
           const entry = {
             id: String(Date.now()),
             createdAtMs: Date.now(),
-            diverName: 'Your Name',
+            diverName,
             o2,
             he,
             ppO2,
