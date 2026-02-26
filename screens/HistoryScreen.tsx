@@ -192,12 +192,12 @@ function HistoryScreen() {
               className={`mb-3 rounded-2xl border border-[#0f2940] bg-zinc-900/80 p-4 ${borderColor} border-l-2`}
             >
               <View className="flex-row items-start justify-between">
-                <View className="flex-1 pr-3">
-                  <Text className="text-2xl font-semibold text-slate-100">
+                <View className="flex-1 flex-row gap-3 pr-3 items-center">
+                  <Text className="text-xl font-semibold text-slate-100">
                     {getMixTitle(item)}
                   </Text>
                   <View
-                    className={`mt-2 self-start rounded-full border px-2 py-1 ${badgeContainerStyle}`}
+                    className={`self-start rounded-full border px-2 py-1 ${badgeContainerStyle}`}
                   >
                     <Text
                       className={`text-[10px] font-semibold ${badgeTextStyle}`}
@@ -208,34 +208,37 @@ function HistoryScreen() {
                 </View>
 
                 <View className="items-end">
-                  <Text className="text-lg text-zinc-400">
+                  <Text className="text-xl text-zinc-400">
                     {TIME_FORMATTER.format(new Date(item.createdAtMs))}
                   </Text>
-                  <TouchableOpacity
-                    onPress={() => confirmDelete(item)}
-                    className="mt-2 p-2"
-                  >
-                    <Feather name="trash-2" size={18} color="#ef4444" />
-                  </TouchableOpacity>
                 </View>
               </View>
 
               <View className="my-4 h-px bg-[#0f2940]" />
 
-              <View className="flex-row items-end justify-between">
+              <View className="flex-row items-center justify-between">
                 <View>
-                  <Text className="text-xs uppercase tracking-[1px] text-zinc-500">
-                    LIMIT: {(item.ppO2 ?? 1.4).toFixed(2)} PPO2
-                  </Text>
-                  <View className="mt-2 flex-row items-end">
-                    <Text className="text-5xl font-bold text-cyan-400">
+                  <View className="flex flex-row gap-2 items-end">
+                    <Text className="text-ms text-zinc-300">MOD Result</Text>
+                    <Text className="text-xs uppercase text-zinc-500">
+                      ({(item.ppO2 ?? 1.4).toFixed(1)} PPO2)
+                    </Text>
+                  </View>
+                  <View className="mt-2 flex-row items-baseline">
+                    <Text className="text-3xl font-bold text-cyan-400">
                       {item.modMeters?.toFixed(1) ?? '--'}
                     </Text>
-                    <Text className="mb-1 ml-1 text-3xl text-zinc-400">m</Text>
+                    <Text className="mb-1 ml-1 text-xl text-zinc-400">m</Text>
                   </View>
                 </View>
-
-                <Text className="text-2xl text-zinc-300">MOD Result</Text>
+                <View>
+                  <TouchableOpacity
+                    onPress={() => confirmDelete(item)}
+                    className="mt-2 p-2"
+                  >
+                    <Feather name="trash-2" size={24} color="#ef4444" />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           );

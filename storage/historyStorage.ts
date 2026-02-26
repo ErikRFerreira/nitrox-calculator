@@ -27,14 +27,14 @@ function normalizeEntry(entry: RawHistoryEntry): HistoryEntry {
     return entry as HistoryEntry;
   }
 
-  const legacyFromCreatedAt = parseLegacyDate(entry.createdAt);
-  if (legacyFromCreatedAt !== null) {
-    return { ...entry, createdAtMs: legacyFromCreatedAt };
-  }
-
   const numericId = Number(entry.id);
   if (Number.isFinite(numericId)) {
     return { ...entry, createdAtMs: numericId };
+  }
+
+  const legacyFromCreatedAt = parseLegacyDate(entry.createdAt);
+  if (legacyFromCreatedAt !== null) {
+    return { ...entry, createdAtMs: legacyFromCreatedAt };
   }
 
   return { ...entry, createdAtMs: Date.now() };

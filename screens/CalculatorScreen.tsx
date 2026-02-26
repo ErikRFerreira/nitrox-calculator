@@ -166,6 +166,7 @@ function CalculatorScreen() {
           navigation.navigate('Label', {
             o2,
             he: effectiveHe,
+            ppO2,
             modMeters: modMeters ?? undefined,
             endMeters: isTrimix ? (endMeters ?? undefined) : undefined,
           });

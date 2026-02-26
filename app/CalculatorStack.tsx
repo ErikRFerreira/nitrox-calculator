@@ -7,6 +7,7 @@ export type CalculatorStackParamList = {
   Label: {
     o2: number;
     he: number;
+    ppO2: number;
     modMeters?: number;
     endMeters?: number;
   };

@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 type LabelRoute = RouteProp<CalculatorStackParamList, 'Label'>;
 function LabelScreen() {
   const route = useRoute<LabelRoute>();
-  const { o2, he, modMeters, endMeters } = route.params;
+  const { o2, he, ppO2, modMeters, endMeters } = route.params;
   const navigation = useNavigation();
 
   // Format date as 'dd/mm/yy'
@@ -117,7 +117,7 @@ function LabelScreen() {
             diverName: 'Your Name',
             o2,
             he,
-            ppO2: undefined,
+            ppO2,
             modMeters,
             endMeters,
           };
