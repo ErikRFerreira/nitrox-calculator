@@ -20,7 +20,7 @@ function MODview({ modMeters, modFeet, hasError, ppO2 }: Props) {
 
   useEffect(() => {
     pulse.value = withRepeat(
-      withTiming(1, { duration: 900, easing: Easing.inOut(Easing.ease) }),
+      withTiming(1, { duration: 1200, easing: Easing.inOut(Easing.ease) }),
       -1,
       true,
     );
@@ -28,8 +28,8 @@ function MODview({ modMeters, modFeet, hasError, ppO2 }: Props) {
 
   const numberGlowStyle = useAnimatedStyle(() => {
     const shouldGlow = !hasError && modMeters !== null;
-    const alpha = shouldGlow ? 0.2 + pulse.value * 0.35 : 0;
-    const radius = shouldGlow ? 16 + pulse.value * 14 : 0;
+    const alpha = shouldGlow ? 0.34 + pulse.value * 0.46 : 0;
+    const radius = shouldGlow ? 22 + pulse.value * 20 : 0;
 
     return {
       textShadowColor: `rgba(8, 145, 178, ${alpha})`,
@@ -40,13 +40,13 @@ function MODview({ modMeters, modFeet, hasError, ppO2 }: Props) {
 
   const glowLayerStyle = useAnimatedStyle(() => {
     const shouldGlow = !hasError && modMeters !== null;
-    const opacity = shouldGlow ? 0.12 + pulse.value * 0.28 : 0;
+    const opacity = shouldGlow ? 0.22 + pulse.value * 0.42 : 0;
 
     return {
       opacity,
-      transform: [{ scale: shouldGlow ? 1.0 + pulse.value * 0.015 : 1 }],
+      transform: [{ scale: shouldGlow ? 1.0 + pulse.value * 0.035 : 1 }],
       textShadowColor: 'rgba(8, 145, 178, 0.95)',
-      textShadowRadius: 22 + pulse.value * 18,
+      textShadowRadius: 30 + pulse.value * 28,
       textShadowOffset: { width: 0, height: 0 },
     };
   }, [hasError, modMeters]);

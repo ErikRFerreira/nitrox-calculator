@@ -3,6 +3,8 @@ import { Text, View } from 'react-native';
 import { CalculatorStackParamList } from '../app/CalculatorStack';
 import { Feather } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
+
+import { addHistoryEntry } from '../storage/historyStorage';
 import { useNavigation } from '@react-navigation/native';
 
 type LabelRoute = RouteProp<CalculatorStackParamList, 'Label'>;
@@ -106,6 +108,30 @@ function LabelScreen() {
           ! Always verify your gas content with an analyzer before diving
         </Text>
       </View>
+
+      <TouchableOpacity
+        onPress={async () => {
+          const entry = {
+            id: String(Date.now()),
+            createdAtMs: Date.now(),
+            diverName: 'Your Name',
+            o2,
+            he,
+            ppO2: undefined,
+            modMeters,
+            endMeters,
+          };
+
+          await addHistoryEntry(entry);
+
+          navigation.navigate('History' as never);
+        }}
+        className="bg-[#0493c6]/80 mt-6 rounded-2xl p-4 items-center"
+      >
+        <Text className="text-white font-semibold text-lg">
+          Save to History
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
