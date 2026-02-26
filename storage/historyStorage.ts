@@ -23,7 +23,10 @@ function parseLegacyDate(dateString?: string): number | null {
 }
 
 function normalizeEntry(entry: RawHistoryEntry): HistoryEntry {
-  if (typeof entry.createdAtMs === 'number' && Number.isFinite(entry.createdAtMs)) {
+  if (
+    typeof entry.createdAtMs === 'number' &&
+    Number.isFinite(entry.createdAtMs)
+  ) {
     return entry as HistoryEntry;
   }
 

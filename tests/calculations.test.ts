@@ -1,8 +1,5 @@
-import {
-  calculateEND,
-  calculateMOD,
-  metersToFeet,
-} from '../domain/gas/calculations';
+import { calculateEND, calculateMOD } from '../domain/gas/calculations';
+import { formatDepth, metersToFeet } from '../utils/units';
 import { validateMix } from '../domain/gas/validators';
 
 describe('Gas domain', () => {
@@ -78,6 +75,22 @@ describe('Gas domain', () => {
     // Conversion preserves fractional precision.
     test('returns precise conversion for non-integer result', () => {
       expect(metersToFeet(1)).toBeCloseTo(3.28084, 5);
+    });
+  });
+
+  describe('formatDepth', () => {
+    test('formats primary as meters and secondary as feet for metric units', () => {
+      expect(formatDepth(10, 'metric')).toEqual({
+        primary: '10.0 m',
+        secondary: '33 ft',
+      });
+    });
+
+    test('formats primary as feet and secondary as meters for imperial units', () => {
+      expect(formatDepth(10, 'imperial')).toEqual({
+        primary: '33 ft',
+        secondary: '10.0 m',
+      });
     });
   });
 });

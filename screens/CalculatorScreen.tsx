@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
@@ -9,11 +9,8 @@ import PresetChips from '../components/PresetChips';
 import SegmentedToggle from '../components/SegmentedToggle';
 import StepperInput from '../components/StepperInput';
 import SwitchCard from '../components/SwitchCard';
-import {
-  calculateEND,
-  calculateMOD,
-  metersToFeet,
-} from '../domain/gas/calculations';
+import { calculateEND, calculateMOD } from '../domain/gas/calculations';
+
 import {
   DEFAULT_HE,
   DEFAULT_O2,
@@ -40,7 +37,6 @@ function CalculatorScreen() {
   const hasError = warnings.some((w) => w.type === 'error');
 
   const modMeters = hasError ? null : calculateMOD(mix, ppO2);
-  const modFeet = modMeters === null ? null : metersToFeet(modMeters);
   const effectiveHe = isTrimix ? he : 0;
 
   const endMeters =
@@ -85,7 +81,6 @@ function CalculatorScreen() {
 
       <MODview
         modMeters={modMeters}
-        modFeet={modFeet}
         hasError={hasError}
         ppO2={ppO2}
       />

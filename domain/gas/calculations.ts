@@ -18,16 +18,6 @@ export function calculateMOD(mix: GasMix, ppO2: number): number {
 }
 
 /**
- * Converts a depth in meters to feet, ensuring the result is not negative.
- *
- * @param meters - The depth in meters to convert.
- * @returns - The equivalent depth in feet, clamped to a minimum of 0.
- */
-export function metersToFeet(meters: number): number {
-  return Math.max(0, meters * 3.28084);
-}
-
-/**
  * Calculates the Equivalent Narcotic Depth (END) for a given gas mix and depth in meters.
  *
  * @param mix - The gas mix, containing percentages of O2 and He.

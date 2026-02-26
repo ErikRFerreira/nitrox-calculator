@@ -1,5 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
+import { formatDepth } from '../utils/units';
+import { getSettings } from '../storage/settingsStorage';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -10,13 +12,13 @@ import Animated, {
 
 type Props = {
   modMeters: number | null;
-  modFeet: number | null;
   hasError: boolean;
   ppO2: number;
 };
 
-function MODview({ modMeters, modFeet, hasError, ppO2 }: Props) {
+function MODview({ modMeters, hasError, ppO2 }: Props) {
   const pulse = useSharedValue(0);
+  const [units, setUnits] = useState<'metric' | 'imperial'>('metric');
 
   useEffect(() => {
     pulse.value = withRepeat(
@@ -25,6 +27,14 @@ function MODview({ modMeters, modFeet, hasError, ppO2 }: Props) {
       true,
     );
   }, [pulse]);
+
+  useEffect(() => {
+    const load = async () => {
+      const s = await getSettings();
+      setUnits(s.units);
+    };
+    load();
+  }, []);
 
   const numberGlowStyle = useAnimatedStyle(() => {
     const shouldGlow = !hasError && modMeters !== null;
@@ -51,11 +61,32 @@ function MODview({ modMeters, modFeet, hasError, ppO2 }: Props) {
     };
   }, [hasError, modMeters]);
 
-  const modLabel = modMeters !== null ? modMeters.toFixed(1) : '--';
-  const modFeetLabel = modFeet !== null ? `${modFeet.toFixed(1)} ft` : '';
+  const formatted = modMeters !== null ? formatDepth(modMeters, units) : null;
+  const primary = formatted?.primary ?? '';
+  const lastSpaceIdx = primary.lastIndexOf(' ');
+  const modLabel =
+    modMeters !== null
+      ? lastSpaceIdx > 0
+        ? primary.slice(0, lastSpaceIdx)
+        : primary
+      : '--';
+  const modUnit =
+    modMeters !== null && lastSpaceIdx > 0
+      ? primary.slice(lastSpaceIdx + 1)
+      : '';
+  const modSecondaryLabel =
+    modMeters !== null ? (formatted?.secondary ?? '') : '';
 
   return (
-    <View className="mt-4 items-center overflow-hidden rounded-[32px] border border-[#001526]/80 bg-[#02070d]/95 px-6 py-10">
+    <View
+      className="mt-4 items-center overflow-hidden rounded-[32px] border border-[#0b2743] bg-[#02070d] px-6 py-10"
+      style={{
+        shadowColor: '#0d8fbd',
+        shadowOpacity: 0.2,
+        shadowRadius: 16,
+        elevation: 6,
+      }}
+    >
       <Text className="mb-6 text-xs font-bold uppercase tracking-[4px] text-[#0493c6]">
         Max Operating Depth
       </Text>
@@ -78,14 +109,14 @@ function MODview({ modMeters, modFeet, hasError, ppO2 }: Props) {
         <Text
           className={`ml-2 mb-3 text-6xl font-semibold ${hasError ? 'text-zinc-700' : 'text-[#0493c6]'}`}
         >
-          m
+          {modUnit}
         </Text>
       </View>
 
       <Text
         className={`${hasError ? 'text-zinc-700' : 'text-slate-500'} mt-2 text-2xl`}
       >
-        {modFeetLabel}
+        {modSecondaryLabel}
       </Text>
 
       {ppO2 === 1.6 && (

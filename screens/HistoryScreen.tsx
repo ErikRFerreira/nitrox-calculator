@@ -152,7 +152,9 @@ function HistoryScreen() {
 
   return (
     <View className="flex-1 bg-zinc-950 px-4 pb-4 pt-10">
-      <Text className="text-center text-2xl font-bold text-white">History</Text>
+      <Text className="text-center text-2xl font-bold mt-2 text-white">
+        History
+      </Text>
 
       <View className="mt-4 flex-row border-b border-[#0f2940]">
         {renderFilterTab('All', 'all')}

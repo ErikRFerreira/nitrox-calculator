@@ -1,14 +1,17 @@
-import { RouteProp, useRoute } from '@react-navigation/native';
-import { Text, View } from 'react-native';
-import { CalculatorStackParamList } from '../app/CalculatorStack';
 import { Feather } from '@expo/vector-icons';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
+import { Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 
+import { CalculatorStackParamList } from '../app/CalculatorStack';
 import { addHistoryEntry } from '../storage/historyStorage';
-import { useNavigation } from '@react-navigation/native';
+import { getSettings } from '../storage/settingsStorage';
 
 type LabelRoute = RouteProp<CalculatorStackParamList, 'Label'>;
 function LabelScreen() {
+  const [diverName, setDiverName] = useState('');
   const route = useRoute<LabelRoute>();
   const { o2, he, ppO2, modMeters, endMeters } = route.params;
   const navigation = useNavigation();
@@ -27,6 +30,17 @@ function LabelScreen() {
   } else {
     mixDisplay = `${o2}%`;
   }
+
+  // Load diver name from settings
+  useEffect(() => {
+    const load = async () => {
+      const s = await getSettings();
+      if (!diverName) {
+        setDiverName(s.userName || 'Your Name');
+      }
+    };
+    load();
+  }, []);
 
   return (
     <View className="flex-1 bg-zinc-950 p-6">
@@ -52,7 +66,7 @@ function LabelScreen() {
             <Text className="text-xs text-blue-500 tracking-widest mb-1">
               NAME
             </Text>
-            <Text className="text-zinc-900 text-xl font-bold">Your Name</Text>
+            <Text className="text-zinc-900 text-xl font-bold">{diverName}</Text>
           </View>
           {/* Date */}
           <View className="flex-1 ml-2 items-end">
