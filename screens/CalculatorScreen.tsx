@@ -1,17 +1,16 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useNavigation } from '@react-navigation/native';
-import { CalculatorStackParamList } from '../app/CalculatorStack';
 
+import { CalculatorStackParamList } from '../app/CalculatorStack';
+import ENDview from '../components/ENDview';
 import MODview from '../components/MODview';
 import PresetChips from '../components/PresetChips';
 import SegmentedToggle from '../components/SegmentedToggle';
 import StepperInput from '../components/StepperInput';
 import SwitchCard from '../components/SwitchCard';
 import { calculateEND, calculateMOD } from '../domain/gas/calculations';
-import { useSettings } from '../storage/useSettings';
-
 import {
   DEFAULT_HE,
   DEFAULT_O2,
@@ -19,7 +18,7 @@ import {
   DEFAULT_TRIMIX_HE,
 } from '../domain/gas/constants';
 import { validateMix } from '../domain/gas/validators';
-import ENDview from '../components/ENDview';
+import { useSettings } from '../storage/useSettings';
 
 type Nav = NativeStackNavigationProp<
   CalculatorStackParamList,
@@ -100,28 +99,30 @@ function CalculatorScreen() {
         </View>
       )}
 
-      <StepperInput
-        label="Oxygen (O2)"
-        value={o2}
-        onChange={setO2Safe}
-        min={21}
-        max={100}
-      />
+      <View className="mt-6 bg-[#1c1f22]/20 border border-[#0f1113] p-3 rounded-xl mx-[-12px]">
+        <StepperInput
+          label="Oxygen (O2)"
+          value={o2}
+          onChange={setO2Safe}
+          min={21}
+          max={100}
+        />
 
-      <PresetChips
-        presets={[
-          { label: 'AIR', o2: DEFAULT_O2, he: DEFAULT_HE },
-          { label: 'EAN30', o2: 30, he: 0 },
-          { label: 'EAN32', o2: 32, he: 0 },
-          { label: 'EAN36', o2: 36, he: 0 },
-        ]}
-        activeO2={o2}
-        activeHe={he}
-        onSelect={(o2Preset, hePreset) => {
-          setO2(o2Preset);
-          setHe(hePreset);
-        }}
-      />
+        <PresetChips
+          presets={[
+            { label: 'AIR', o2: DEFAULT_O2, he: DEFAULT_HE },
+            { label: 'EAN30', o2: 30, he: 0 },
+            { label: 'EAN32', o2: 32, he: 0 },
+            { label: 'EAN36', o2: 36, he: 0 },
+          ]}
+          activeO2={o2}
+          activeHe={he}
+          onSelect={(o2Preset, hePreset) => {
+            setO2(o2Preset);
+            setHe(hePreset);
+          }}
+        />
+      </View>
 
       <SwitchCard
         isTrimix={isTrimix}
@@ -130,7 +131,7 @@ function CalculatorScreen() {
       />
 
       {isTrimix && (
-        <>
+        <View className="mt-6 bg-[#1c1f22]/20 border border-[#0f1113] p-3 rounded-xl mx-[-12px]">
           <StepperInput
             label="Helium (He)"
             value={he}
@@ -153,8 +154,10 @@ function CalculatorScreen() {
             }}
           />
 
-          {!hasError && <ENDview endMeters={endMeters} units={settings.units} />}
-        </>
+          {!hasError && (
+            <ENDview endMeters={endMeters} units={settings.units} />
+          )}
+        </View>
       )}
 
       <TouchableOpacity

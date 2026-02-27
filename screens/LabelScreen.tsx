@@ -5,9 +5,9 @@ import { Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 
 import { CalculatorStackParamList } from '../app/CalculatorStack';
-import { formatDepth } from '../utils/units';
 import { addHistoryEntry } from '../storage/historyStorage';
 import { useSettings } from '../storage/useSettings';
+import { formatDepth } from '../utils/units';
 
 type LabelRoute = RouteProp<CalculatorStackParamList, 'Label'>;
 function LabelScreen() {
@@ -63,17 +63,19 @@ function LabelScreen() {
         <View className="flex-row justify-between items-center mb-6">
           {/* Name */}
           <View className="flex-1 mr-2">
-            <Text className="text-xs text-blue-500 tracking-widest mb-1">
+            <Text className="text-md text-blue-500 tracking-widest mb-1">
               NAME
             </Text>
-            <Text className="text-zinc-900 text-xl font-bold">{diverName}</Text>
+            <Text className="text-zinc-900 text-2xl font-bold">
+              {diverName}
+            </Text>
           </View>
           {/* Date */}
           <View className="flex-1 ml-2 items-end">
-            <Text className="text-xs text-blue-500 tracking-widest mb-1">
+            <Text className="text-md text-blue-500 tracking-widest mb-1">
               DATE
             </Text>
-            <Text className="text-zinc-900 text-xl font-bold">
+            <Text className="text-zinc-900 text-2xl font-bold">
               {formattedDate}
             </Text>
           </View>
@@ -83,22 +85,22 @@ function LabelScreen() {
         <View className="flex-row justify-between items-center mb-6">
           {/* % Mix or Trimix */}
           <View className="flex-1 mr-2">
-            <Text className="text-xs text-blue-500 tracking-widest mb-1">
+            <Text className="text-md text-blue-500 tracking-widest mb-1">
               MIX %
             </Text>
-            <Text className="text-xl font-extrabold text-zinc-900">
+            <Text className="text-2xl font-extrabold text-zinc-900">
               {mixDisplay}
             </Text>
           </View>
           {/* MOD */}
           <View className="flex-1 ml-2 items-end">
-            <Text className="text-xs text-blue-500 tracking-widest mb-1">
+            <Text className="text-md text-blue-500 tracking-widest mb-1">
               MOD
             </Text>
-            <Text className="text-zinc-900 text-xl font-extrabold">
+            <Text className="text-zinc-900 text-2xl font-extrabold">
               {formattedMod?.primary ?? '--'}
             </Text>
-            <Text className="text-xs text-zinc-500">
+            <Text className="text-md text-zinc-500">
               {formattedMod?.secondary}
             </Text>
           </View>
@@ -111,10 +113,10 @@ function LabelScreen() {
               <Text className="text-xs text-blue-500 tracking-widest mb-1">
                 END
               </Text>
-              <Text className="text-zinc-900 text-xl font-extrabold">
+              <Text className="text-zinc-900 text-2xl font-extrabold">
                 {formattedEnd?.primary ?? '--'}
               </Text>
-              <Text className="text-xs text-zinc-500">
+              <Text className="text-md text-zinc-500">
                 {formattedEnd?.secondary}
               </Text>
             </View>

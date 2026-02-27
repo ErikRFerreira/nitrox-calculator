@@ -54,8 +54,8 @@ function StepperInput({
   };
 
   return (
-    <View className="mt-6">
-      <Text className="text-zinc-400 mb-2">{label}</Text>
+    <View>
+      <Text className="text-zinc-400 mb-2 ml-1">{label}</Text>
       <View className="flex-row items-center justify-between bg-zinc-900 p-3 rounded-xl">
         <TouchableOpacity
           className="bg-zinc-800 rounded-xl w-14 h-14 items-center justify-center"

@@ -1,30 +1,7 @@
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
+
 import { Units } from '../domain/gas/types';
 import { formatDepth } from '../utils/units';
-
-/*
- theme: {
-                extend: {
-                    colors: {
-                        "primary": "#167b9c",
-                        "background-light": "#f9fafa",
-                        "background-dark": "#0f1113",
-                        "surface-dark": "#1c1f22",
-                        "border-dark": "#2d3238",
-                        "amber-alert": "#d97706"
-                    },
-                    fontFamily: {
-                        "display": ["Manrope", "sans-serif"]
-                    },
-                    borderRadius: {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                },
-            },
-*/
 
 type Props = {
   endMeters: number | null;
