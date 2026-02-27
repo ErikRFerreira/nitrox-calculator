@@ -1,6 +1,7 @@
+import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 import { CalculatorStackParamList } from '../app/CalculatorStack';
@@ -67,18 +68,20 @@ function CalculatorScreen() {
 
   return (
     <ScrollView
-      className="flex-1"
+      className="flex-1 pt-6"
       contentContainerStyle={{ flexGrow: 1, padding: 24, paddingBottom: 40 }}
       showsVerticalScrollIndicator={false}
     >
-      <SegmentedToggle
-        options={[
-          { label: 'ppO2 1.4', value: 1.4 },
-          { label: 'ppO2 1.6', value: 1.6 },
-        ]}
-        value={ppO2}
-        onChange={setPpO2}
-      />
+      <View className="bg-[#1c1f22]/20 border border-[#0f1113] p-3 rounded-xl mx-[-12px] flex flex-col gap-4">
+        <SegmentedToggle
+          options={[
+            { label: 'ppO2 1.4', value: 1.4 },
+            { label: 'ppO2 1.6', value: 1.6 },
+          ]}
+          value={ppO2}
+          onChange={setPpO2}
+        />
+      </View>
 
       <MODview
         modMeters={modMeters}
@@ -173,10 +176,11 @@ function CalculatorScreen() {
           });
         }}
         disabled={hasError}
-        className={`mt-6 rounded-2xl p-4 items-center ${
+        className={`mt-6 rounded-2xl p-4 items-center flex-row justify-center gap-2 ${
           hasError ? 'bg-zinc-800' : 'bg-[#0493c6]/80'
         }`}
       >
+        <Feather name="eye" size={18} color="#fff" />
         <Text className="text-white font-semibold text-lg">View Label</Text>
       </TouchableOpacity>
     </ScrollView>

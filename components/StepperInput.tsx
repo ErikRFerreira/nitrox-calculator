@@ -55,7 +55,9 @@ function StepperInput({
 
   return (
     <View>
-      <Text className="text-zinc-400 mb-2 ml-1">{label}</Text>
+      <Text className="text-zinc-400 ml-1 uppercase tracking-[2px] mb-3 text-xs">
+        {label}
+      </Text>
       <View className="flex-row items-center justify-between bg-zinc-900 p-3 rounded-xl">
         <TouchableOpacity
           className="bg-zinc-800 rounded-xl w-14 h-14 items-center justify-center"
@@ -63,7 +65,7 @@ function StepperInput({
           onLongPress={() => startLongPress('dec')}
           onPressOut={stopInterval}
         >
-          <Text className="text-[#33C4E3] text-xl font-bold">−</Text>
+          <Text className="text-[#33C4E3] text-2xl font-medium">−</Text>
         </TouchableOpacity>
 
         <Text className="text-white text-4xl font-bold">{value}%</Text>
@@ -74,7 +76,7 @@ function StepperInput({
           onLongPress={() => startLongPress('inc')}
           onPressOut={stopInterval}
         >
-          <Text className="text-[#33C4E3] text-xl font-bold">+</Text>
+          <Text className="text-[#33C4E3] text-2xl font-medium">+</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -1,3 +1,4 @@
+import * as Haptics from 'expo-haptics';
 import { Text, TouchableOpacity, View } from 'react-native';
 
 type Option<T extends string | number> = {
@@ -17,14 +18,17 @@ function SegmentedToggle<T extends string | number>({
   onChange,
 }: Props<T>) {
   return (
-    <View className="flex-row bg-zinc-900 rounded-xl p-1 mt-6">
+    <View className="flex-row bg-zinc-900 rounded-xl">
       {options.map((opt) => {
         const active = opt.value === value;
         return (
           <TouchableOpacity
             key={String(opt.value)}
-            onPress={() => onChange(opt.value)}
-            className={`flex-1 py-2 rounded-lg ${active ? 'bg-zinc-800' : ''}`}
+            onPress={() => {
+              Haptics.selectionAsync();
+              onChange(opt.value);
+            }}
+            className={`flex-1 py-3 rounded-lg ${active ? 'bg-[#167b9c]/80' : ''}`}
           >
             <Text
               className={`text-center text-sm font-bold ${active ? 'text-white' : 'text-zinc-400'}`}

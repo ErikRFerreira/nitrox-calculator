@@ -24,7 +24,9 @@ function SwitchCard({ isTrimix, setIsTrimix, setHe }: Props) {
       }}
     >
       <View>
-        <Text className="text-sm font-bold text-slate-100">Trimix Mode</Text>
+        <Text className=" text-zinc-500 text-xs font-bold uppercase tracking-[2px]">
+          Trimix Mode
+        </Text>
       </View>
 
       <Switch

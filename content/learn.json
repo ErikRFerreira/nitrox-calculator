@@ -1,7 +1,470 @@
-[
-  {
-    "id": "ppo2",
-    "title": "ppO2 basics",
-    "body": "Partial pressure of oxygen (ppO2) helps manage oxygen toxicity risk. This section will explain working vs contingency limits."
+{
+  "version": 3,
+  "categories": [
+    {
+      "id": "fundamentals",
+      "title": "Gas Fundamentals",
+      "articles": [
+        {
+          "id": "why-nitrox",
+          "title": "Why use Nitrox?",
+          "blocks": [
+            {
+              "type": "text",
+              "content": "Inert gases such as nitrogen dissolve into your body during a dive. This is the basis for decompression sickness risk and no-decompression limits."
+            },
+            {
+              "type": "text",
+              "content": "Nitrox (enriched air) reduces the fraction of nitrogen in your breathing gas. Less nitrogen generally means reduced nitrogen uptake at a given depth and time."
+            },
+            {
+              "type": "text",
+              "content": "Divers commonly use Nitrox to increase no-decompression time on repetitive dives, add conservatism, or reduce post-dive fatigue (subjective reports vary)."
+            },
+            {
+              "type": "warning",
+              "content": "Nitrox does not make you immune to decompression sickness. It reduces nitrogen exposure but introduces oxygen exposure limits."
+            },
+            {
+              "type": "warning",
+              "content": "A common misconception is that Nitrox allows you to dive deeper. Oxygen limits usually reduce maximum depth compared to air."
+            },
+            {
+              "type": "checklist",
+              "title": "Practical takeaways",
+              "items": [
+                "Use Nitrox to manage nitrogen exposure, not to exceed training limits.",
+                "Always analyze the cylinder yourself and label it clearly before the dive.",
+                "Plan depth based on MOD, not on how you feel."
+              ]
+            },
+            {
+              "type": "image",
+              "asset": "learn_ndl_comparison.png",
+              "caption": "Conceptual comparison: reduced nitrogen exposure can increase NDL at some depths."
+            }
+          ]
+        },
+        {
+          "id": "dalton-law",
+          "title": "Dalton’s Law & Partial Pressure",
+          "blocks": [
+            {
+              "type": "text",
+              "content": "Dalton’s Law: the total pressure of a gas mixture equals the sum of the partial pressures of each gas in that mixture."
+            },
+            {
+              "type": "formula",
+              "content": "P_total = PP_O2 + PP_N2 + PP_He"
+            },
+            {
+              "type": "text",
+              "content": "Partial pressure for one gas equals its fraction multiplied by the total absolute pressure."
+            },
+            {
+              "type": "formula",
+              "content": "P_gas = F_gas × P_total"
+            },
+            {
+              "type": "text",
+              "content": "Important: Always use absolute pressure (ATA or bar), not cylinder gauge pressure."
+            },
+            {
+              "type": "text",
+              "content": "In seawater (metric), absolute pressure ≈ (Depth in meters / 10) + 1."
+            },
+            {
+              "type": "text",
+              "content": "Example at 30 meters (≈4 ATA absolute pressure in seawater):"
+            },
+            {
+              "type": "checklist",
+              "title": "Air (21% O₂ / 79% N₂) at 30m",
+              "items": [
+                "ppO₂ = 0.21 × 4 = 0.84 ATA",
+                "ppN₂ = 0.79 × 4 = 3.16 ATA",
+                "Total ≈ 4 ATA"
+              ]
+            },
+            {
+              "type": "checklist",
+              "title": "EAN32 (32% O₂ / 68% N₂) at 30m",
+              "items": [
+                "ppO₂ = 0.32 × 4 = 1.28 ATA",
+                "ppN₂ = 0.68 × 4 = 2.72 ATA",
+                "Notice reduced nitrogen compared to air"
+              ]
+            },
+            {
+              "type": "checklist",
+              "title": "EAN36 (36% O₂ / 64% N₂) at 30m",
+              "items": [
+                "ppO₂ = 0.36 × 4 = 1.44 ATA",
+                "ppN₂ = 0.64 × 4 = 2.56 ATA",
+                "ppO₂ now exceeds 1.4 ATA working limit"
+              ]
+            },
+            {
+              "type": "warning",
+              "content": "EAN36 at 30m produces a ppO₂ of 1.44 ATA. This exceeds a common working limit of 1.4 ATA and illustrates why MOD must always be respected."
+            }
+          ]
+        },
+        {
+          "id": "inert-gas-loading",
+          "title": "Inert Gas Loading (Saturation)",
+          "blocks": [
+            {
+              "type": "text",
+              "content": "During a dive, inert gases (primarily nitrogen, and sometimes helium) dissolve into tissues. Over time at a constant depth, tissues move toward saturation at that ambient pressure."
+            },
+            {
+              "type": "text",
+              "content": "On ascent, ambient pressure decreases and tissues off-gas. Ascend and decompress according to your training and the plan."
+            },
+            {
+              "type": "image",
+              "asset": "learn_tissue_loading.png",
+              "caption": "Conceptual tissue loading: on-gassing at depth and off-gassing on ascent."
+            },
+            {
+              "type": "warning",
+              "content": "This app reinforces gas concepts and MOD/EAD/END logic. It is not a decompression planner."
+            }
+          ]
+        },
+        {
+          "id": "narcosis",
+          "title": "Gas Narcosis (Nitrogen & Oxygen)",
+          "blocks": [
+            {
+              "type": "text",
+              "content": "Narcosis is a reversible impairment that can occur at depth. Nitrogen is a primary contributor. Many technical diving models also treat oxygen as narcotic, while helium is considered minimally narcotic."
+            },
+            {
+              "type": "text",
+              "content": "END (Equivalent Narcotic Depth) estimates narcotic effect relative to air at a shallower depth."
+            },
+            {
+              "type": "warning",
+              "content": "Individual susceptibility varies significantly. END is a planning tool, not a guarantee of performance."
+            }
+          ]
+        },
+        {
+          "id": "hypoxia",
+          "title": "Hypoxia & Trimix",
+          "blocks": [
+            {
+              "type": "text",
+              "content": "Trimix blends may contain reduced oxygen fractions. If oxygen percentage is too low, the gas may not support consciousness at shallow depth or the surface."
+            },
+            {
+              "type": "warning",
+              "content": "Hypoxic Trimix (typically below 16% oxygen) is not breathable at the surface and requires appropriate travel gas and training."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "oxygen",
+      "title": "Oxygen Management",
+      "description": "ppO₂ limits, oxygen toxicity, and exposure concepts.",
+      "articles": [
+        {
+          "id": "ppo2-limits",
+          "title": "ppO₂ Limits (1.4 vs 1.6)",
+          "blocks": [
+            {
+              "type": "text",
+              "content": "ppO₂ equals oxygen fraction multiplied by absolute pressure. As depth increases, ppO₂ increases."
+            },
+            {
+              "type": "formula",
+              "content": "ppO2 = FO2 × (Depth/10 + 1)"
+            },
+            {
+              "type": "text",
+              "content": "This formula assumes metric units in seawater (depth in meters)."
+            },
+            {
+              "type": "text",
+              "content": "A ppO₂ of 1.4 ATA is commonly used for working portions of dives to provide a safety margin. 1.6 ATA is typically reserved for decompression or short contingency exposure."
+            },
+            {
+              "type": "text",
+              "content": "Example: EAN36 (36% O₂) with a working limit of 1.4 ATA."
+            },
+            {
+              "type": "text",
+              "content": "MOD = [(1.4 / 0.36) − 1] × 10 ≈ 28 meters."
+            },
+            {
+              "type": "warning",
+              "content": "Diving EAN36 to 30 meters would exceed a 1.4 ATA working limit and increase risk of central nervous system (CNS) oxygen toxicity."
+            },
+            {
+              "type": "warning",
+              "content": "Always follow your agency standards and training when selecting oxygen limits."
+            }
+          ]
+        },
+        {
+          "id": "cns-toxicity",
+          "title": "CNS Oxygen Toxicity (VENTID)",
+          "blocks": [
+            {
+              "type": "text",
+              "content": "CNS oxygen toxicity is associated with elevated ppO₂. Symptoms can appear suddenly and require immediate action according to training."
+            },
+            {
+              "type": "text",
+              "content": "CNS oxygen toxicity risk increases with higher ppO₂ and longer exposure. It can occur without warning and may result in convulsions underwater."
+            },
+            {
+              "type": "image",
+              "asset": "learn_ventid.png",
+              "caption": "VENTID is a common mnemonic used for symptom awareness."
+            },
+            {
+              "type": "checklist",
+              "title": "VENTID (mnemonic)",
+              "items": [
+                "V – Visual disturbances",
+                "E – Ear ringing (tinnitus)",
+                "N – Nausea",
+                "T – Twitching (facial/muscle)",
+                "I – Irritability",
+                "D – Dizziness"
+              ]
+            },
+            {
+              "type": "checklist",
+              "title": "Risk Factors",
+              "items": [
+                "Higher ppO₂",
+                "Longer exposure time",
+                "Cold water",
+                "Elevated CO₂ (overexertion, skip breathing)",
+                "Individual susceptibility"
+              ]
+            },
+            {
+              "type": "warning",
+              "content": "A convulsion underwater can lead to loss of regulator and drowning. This is why working limits are conservative."
+            },
+            {
+              "type": "warning",
+              "content": "If you suspect CNS symptoms, follow your training and team procedures. Avoid treating mnemonics as diagnostic tools."
+            }
+          ]
+        },
+        {
+          "id": "pulmonary-toxicity",
+          "title": "Pulmonary Oxygen Toxicity (OTUs)",
+          "blocks": [
+            {
+              "type": "text",
+              "content": "Pulmonary oxygen toxicity relates to longer exposures to elevated oxygen partial pressures. It is commonly managed through dose models (e.g., OTUs/CNS%)."
+            },
+            {
+              "type": "text",
+              "content": "Pulmonary oxygen toxicity develops from prolonged exposure to moderately elevated oxygen partial pressures. It affects the lungs rather than the central nervous system."
+            },
+            {
+              "type": "text",
+              "content": "Technical divers track cumulative exposure using OTUs (Oxygen Tolerance Units) or CNS% models during repetitive or decompression diving."
+            },
+            {
+              "type": "text",
+              "content": "For most recreational Nitrox use, pulmonary toxicity is less limiting than CNS considerations, but it becomes more relevant in technical/decompression diving."
+            },
+            {
+              "type": "warning",
+              "content": "This app does not calculate OTUs/CNS%. Use appropriate planning tools for decompression diving."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "planning",
+      "title": "Planning Tools",
+      "description": "How MOD, EAD, and END relate to gas fractions.",
+      "articles": [
+        {
+          "id": "mod",
+          "title": "MOD (Maximum Operating Depth)",
+          "blocks": [
+            {
+              "type": "text",
+              "content": "MOD is the maximum depth at which a chosen ppO₂ limit is not exceeded for a given oxygen fraction."
+            },
+            {
+              "type": "formula",
+              "content": "MOD = [(ppO2 / FO2) − 1] × 10"
+            },
+            {
+              "type": "text",
+              "content": "This formula assumes metric units in seawater (result in meters)."
+            },
+            {
+              "type": "checklist",
+              "title": "Common usage",
+              "items": [
+                "Pick ppO₂ (often 1.4 for working, 1.6 for contingency/deco)",
+                "Use the mix you will actually breathe at depth",
+                "Label the cylinder with mix and MOD after analysis"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ead",
+          "title": "EAD (Equivalent Air Depth)",
+          "blocks": [
+            {
+              "type": "text",
+              "content": "EAD estimates the depth at which air would produce the same nitrogen partial pressure as your Nitrox mix. It is commonly used to reference air-based tables."
+            },
+            {
+              "type": "formula",
+              "content": "EAD = [((FN2 / 0.79) × (Depth + 10)) − 10]"
+            },
+            {
+              "type": "warning",
+              "content": "EAD is a planning concept. Follow your agency’s method and tools for decompression planning."
+            }
+          ]
+        },
+        {
+          "id": "end",
+          "title": "END (Equivalent Narcotic Depth)",
+          "blocks": [
+            {
+              "type": "text",
+              "content": "A common modern approach treats both nitrogen and oxygen as narcotic, while helium is considered minimally narcotic."
+            },
+            {
+              "type": "formula",
+              "content": "END = [(((FN2 + FO2) / 0.79) × (Depth + 10)) − 10]"
+            },
+            {
+              "type": "text",
+              "content": "Different communities and agencies may use different assumptions (e.g., oxygen narcotic or not). Use the approach taught in your training."
+            }
+          ]
+        },
+        {
+          "id": "daltons-triangle",
+          "title": "Dalton’s Triangle (How to use it)",
+          "blocks": [
+            {
+              "type": "text",
+              "content": "Dalton’s Triangle is a memory aid that helps you rearrange the relationship between partial pressure, fraction, and absolute pressure."
+            },
+            {
+              "type": "image",
+              "asset": "learn_daltons_triangle.png",
+              "caption": "Cover the unknown to derive the formula from the remaining two."
+            },
+            {
+              "type": "checklist",
+              "title": "Examples",
+              "items": [
+                "Unknown ppO₂ → ppO₂ = F × P",
+                "Unknown F → F = ppO₂ ÷ P",
+                "Unknown P → P = ppO₂ ÷ F"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "procedures",
+      "title": "Equipment & Procedures",
+      "description": "Practical steps for analysis, labeling, and oxygen compatibility.",
+      "articles": [
+        {
+          "id": "analysis-rules",
+          "title": "Cylinder Analysis: Practical Rules",
+          "blocks": [
+            {
+              "type": "checklist",
+              "title": "Before the dive",
+              "items": [
+                "Analyze the cylinder with a calibrated analyzer",
+                "Confirm the cylinder you analyzed is the one you will dive",
+                "Label mix and MOD clearly",
+                "If diving as a team, cross-check gas where appropriate"
+              ]
+            },
+            {
+              "type": "warning",
+              "content": "Procedures vary by shop, agency, and team. Follow local and training standards."
+            }
+          ]
+        },
+        {
+          "id": "labeling",
+          "title": "Labeling Best Practices",
+          "blocks": [
+            {
+              "type": "text",
+              "content": "Labeling is a communication tool: it reduces errors and helps maintain consistency between analysis, planning, and execution."
+            },
+            {
+              "type": "checklist",
+              "title": "What to write on a label",
+              "items": [
+                "O₂% (and He% if Trimix)",
+                "MOD (at chosen ppO₂)",
+                "Date",
+                "Your name/initials (or analyzer initials)",
+                "Optional: cylinder pressure, notes"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "o2-clean",
+          "title": "Oxygen Clean Equipment (>40%)",
+          "blocks": [
+            {
+              "type": "text",
+              "content": "Higher oxygen fractions increase fire risk and require oxygen-compatible procedures and equipment. A common threshold discussed in training is above 40% oxygen."
+            },
+            {
+              "type": "image",
+              "asset": "learn_o2_clean_tag.png",
+              "caption": "Example: an O₂-clean tag/label used to indicate oxygen service compatibility."
+            },
+            {
+              "type": "warning",
+              "content": "Follow your agency and gas supplier guidance for oxygen cleaning and compatibility. Do not assume equipment is oxygen-clean without proper service."
+            }
+          ]
+        },
+        {
+          "id": "o2-compatibility",
+          "title": "Oxygen Compatibility & Corrosion (high level)",
+          "blocks": [
+            {
+              "type": "text",
+              "content": "Oxygen-rich environments require special consideration: compatible materials, clean systems, and correct handling reduce risk."
+            },
+            {
+              "type": "text",
+              "content": "This topic is deeper than a short reference. Use recognized training and supplier standards for equipment in oxygen service."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "footer": {
+    "disclaimer": "This content reinforces gas theory concepts and does not replace formal training, certification standards, or decompression planning tools."
   }
-]
+}

@@ -1,3 +1,5 @@
+import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Animated, {
@@ -7,7 +9,6 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
-import { LinearGradient } from 'expo-linear-gradient';
 
 import { Units } from '../domain/gas/types';
 import { formatDepth } from '../utils/units';
@@ -121,8 +122,8 @@ function MODview({ modMeters, hasError, ppO2, units }: Props) {
         </Text>
 
         {ppO2 === 1.6 && (
-          <View className="mt-6 w-full flex-row items-center justify-center rounded-full border border-amber-600/35 bg-amber-950/30 px-2 py-2">
-            <Text className="mr-2 text-base text-amber-500">!</Text>
+          <View className="mt-6 w-full flex-row gap-2 items-center justify-center rounded-full border border-amber-600/35 bg-amber-950/30 px-1 py-3">
+            <Feather name="alert-triangle" size={12} color="#f59e0b" />
             <Text className="text-[8px] font-semibold uppercase tracking-wide text-amber-500">
               Typically used for contingency or decompression
             </Text>

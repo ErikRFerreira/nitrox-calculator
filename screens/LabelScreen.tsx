@@ -125,9 +125,10 @@ function LabelScreen() {
         )}
       </View>
 
-      <View className="mt-6 w-full flex-row items-center justify-center rounded-full border border-amber-600/35 bg-amber-950/30 px-4 py-3">
-        <Text className="text-sm leading-6 font-semibold uppercase tracking-wide text-amber-500 text-center">
-          ! Always verify your gas content with an analyzer before diving
+      <View className="mt-6 w-full flex-row items-center justify-center rounded-full border border-amber-600/35 bg-amber-950/30 px-4 py-4">
+        <Feather name="alert-triangle" size={16} color="#f59e0b" />
+        <Text className="text-xs leading-5 font-semibold uppercase tracking-wide text-amber-500 text-center flex-1">
+          Always verify your gas content with an analyzer before diving
         </Text>
       </View>
 
@@ -148,8 +149,9 @@ function LabelScreen() {
 
           navigation.navigate('History' as never);
         }}
-        className="bg-[#0493c6]/80 mt-6 rounded-2xl p-4 items-center"
+        className="bg-[#0493c6]/80 mt-6 rounded-2xl p-4 items-center flex-row justify-center gap-2"
       >
+        <Feather name="clock" size={18} color="#fff" />
         <Text className="text-white font-semibold text-lg">
           Save to History
         </Text>
