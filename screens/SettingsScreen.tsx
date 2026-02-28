@@ -47,7 +47,7 @@ function SettingsScreen() {
           onPress={saveName}
           className=" bg-[#0493c6]/80 rounded-xl p-4 items-center"
         >
-          <Text className="text-white font-semibold">Update Profile</Text>
+          <Text className="text-white font-semibold">Update Name</Text>
         </TouchableOpacity>
       </View>
 

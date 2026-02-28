@@ -97,7 +97,7 @@ function MODview({ modMeters, hasError, ppO2, units }: Props) {
           <View className="relative items-center justify-center">
             <Animated.Text
               style={glowLayerStyle}
-              className={`absolute text-[92px] font-extrabold leading-[96px] tracking-tight ${hasError ? 'text-zinc-600' : 'text-[#0493c6]'}`}
+              className={`absolute text-[86px] font-extrabold leading-[96px] tracking-tight ${hasError ? 'text-zinc-600' : 'text-[#0493c6]'}`}
             >
               {modLabel}
             </Animated.Text>

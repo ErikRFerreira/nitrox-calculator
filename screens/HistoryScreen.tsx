@@ -1,12 +1,24 @@
 import { Feather } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useMemo, useState } from 'react';
-import { Alert, SectionList, Text, View } from 'react-native';
+import { Calendar } from 'react-native-calendars';
+import { Alert, Modal, SectionList, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 
 import { deleteHistoryEntry, getHistory } from '../storage/historyStorage';
 import { HistoryEntry } from '../storage/types';
 import { useSettings } from '../storage/useSettings';
+import {
+  buildMarkedDates,
+  DateFilter,
+  DateFilterMode,
+  formatDateFilterLabel,
+  getNextDraftDateFilter,
+  getTodayLocalDateKey,
+  isEntryInDateFilter,
+  toLocalDateKey,
+  withDateFilterMode,
+} from '../utils/historyDateFilter';
 import { formatDepth } from '../utils/units';
 
 type FilterType = 'all' | 'nitrox' | 'trimix';
@@ -28,10 +40,11 @@ const TIME_FORMATTER = new Intl.DateTimeFormat('en-GB', {
   hour12: false,
 });
 
-function getDateKey(timestamp: number): string {
-  const date = new Date(timestamp);
-  return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
-}
+const EMPTY_DATE_FILTER: DateFilter = {
+  mode: 'single',
+  startDate: null,
+  endDate: null,
+};
 
 function getSectionTitle(timestamp: number): string {
   const now = new Date();
@@ -63,6 +76,11 @@ function HistoryScreen() {
   const { settings } = useSettings();
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
   const [filter, setFilter] = useState<FilterType>('all');
+  const [isDateModalOpen, setIsDateModalOpen] = useState(false);
+  const [appliedDateFilter, setAppliedDateFilter] =
+    useState<DateFilter>(EMPTY_DATE_FILTER);
+  const [draftDateFilter, setDraftDateFilter] =
+    useState<DateFilter>(EMPTY_DATE_FILTER);
 
   useFocusEffect(
     useCallback(() => {
@@ -101,17 +119,25 @@ function HistoryScreen() {
     );
   };
 
-  const filteredEntries = useMemo(() => {
+  const typeFilteredEntries = useMemo(() => {
     if (filter === 'all') return entries;
     if (filter === 'nitrox') return entries.filter((entry) => entry.he === 0);
     return entries.filter((entry) => entry.he > 0);
   }, [entries, filter]);
 
+  const filteredEntries = useMemo(
+    () =>
+      typeFilteredEntries.filter((entry) =>
+        isEntryInDateFilter(entry.createdAtMs, appliedDateFilter),
+      ),
+    [typeFilteredEntries, appliedDateFilter],
+  );
+
   const sections = useMemo<HistorySection[]>(() => {
     const grouped = new Map<string, HistorySection>();
 
     filteredEntries.forEach((entry) => {
-      const key = getDateKey(entry.createdAtMs);
+      const key = toLocalDateKey(entry.createdAtMs);
       const existing = grouped.get(key);
 
       if (existing) {
@@ -128,8 +154,23 @@ function HistoryScreen() {
     return Array.from(grouped.values());
   }, [filteredEntries]);
 
-  const emptyMessage =
-    filter === 'all'
+  const isDateFilterActive = Boolean(appliedDateFilter.startDate);
+  const dateFilterLabel = formatDateFilterLabel(appliedDateFilter);
+  const todayKey = getTodayLocalDateKey();
+  const markedDates = useMemo(
+    () => buildMarkedDates(draftDateFilter),
+    [draftDateFilter],
+  );
+  const calendarMarkingType =
+    draftDateFilter.mode === 'range' &&
+    draftDateFilter.startDate &&
+    draftDateFilter.endDate
+      ? 'period'
+      : undefined;
+
+  const emptyMessage = isDateFilterActive
+    ? 'No entries for selected date filter.'
+    : filter === 'all'
       ? 'No history entries yet.'
       : filter === 'nitrox'
         ? 'No Nitrox entries yet.'
@@ -153,16 +194,75 @@ function HistoryScreen() {
     );
   };
 
+  const openDateModal = () => {
+    setDraftDateFilter({ ...appliedDateFilter });
+    setIsDateModalOpen(true);
+  };
+
+  const closeDateModal = () => {
+    setIsDateModalOpen(false);
+  };
+
+  const applyDateFilter = () => {
+    setAppliedDateFilter({ ...draftDateFilter });
+    closeDateModal();
+  };
+
+  const clearDateFilter = () => {
+    const cleared: DateFilter = {
+      mode: draftDateFilter.mode,
+      startDate: null,
+      endDate: null,
+    };
+    setDraftDateFilter(cleared);
+    setAppliedDateFilter(cleared);
+    closeDateModal();
+  };
+
+  const setDateFilterMode = (mode: DateFilterMode) => {
+    setDraftDateFilter((current) => withDateFilterMode(current, mode));
+  };
+
+  const handleDayPress = (dateString: string) => {
+    setDraftDateFilter((current) =>
+      getNextDraftDateFilter(current, dateString, todayKey),
+    );
+  };
+
   return (
-    <View className="flex-1 px-4 pb-4 pt-10">
+    <View className="flex-1 px-2 pb-4 pt-10">
       <Text className="text-center text-2xl font-bold mt-2 text-white">
         History
       </Text>
 
-      <View className="mt-4 flex-row border-b border-[#0f2940]">
-        {renderFilterTab('All', 'all')}
-        {renderFilterTab('Nitrox', 'nitrox')}
-        {renderFilterTab('Trimix', 'trimix')}
+      <View className="mt-4 flex-row items-end justify-between border-b border-[#0f2940]">
+        <View className="flex-row">
+          {renderFilterTab('All', 'all')}
+          {renderFilterTab('Nitrox', 'nitrox')}
+          {renderFilterTab('Trimix', 'trimix')}
+        </View>
+
+        <TouchableOpacity
+          onPress={openDateModal}
+          className={`mb-2 flex-row items-center rounded-full border px-3 py-2 mr-2 ${
+            isDateFilterActive
+              ? 'border-cyan-400 bg-cyan-400/10'
+              : 'border-[#0f2940] bg-zinc-900/50'
+          }`}
+        >
+          <Feather
+            name="calendar"
+            size={16}
+            color={isDateFilterActive ? '#22d3ee' : '#a1a1aa'}
+          />
+          <Text
+            className={`ml-2 text-xs ${
+              isDateFilterActive ? 'text-cyan-300' : 'text-zinc-400'
+            }`}
+          >
+            {dateFilterLabel ?? 'Date'}
+          </Text>
+        </TouchableOpacity>
       </View>
 
       <SectionList
@@ -182,9 +282,10 @@ function HistoryScreen() {
           </Text>
         )}
         renderItem={({ item }) => {
-          const formattedMod = item.modMeters !== undefined
-            ? formatDepth(item.modMeters, settings.units)
-            : null;
+          const formattedMod =
+            item.modMeters !== undefined
+              ? formatDepth(item.modMeters, settings.units)
+              : null;
           const isTrimix = item.he > 0;
           const mixTypeLabel = isTrimix ? 'TRIMIX' : 'NITROX';
           const borderColor = isTrimix
@@ -254,6 +355,104 @@ function HistoryScreen() {
           );
         }}
       />
+
+      <Modal
+        transparent
+        animationType="fade"
+        visible={isDateModalOpen}
+        onRequestClose={closeDateModal}
+      >
+        <View className="flex-1 justify-center bg-black/70 px-4">
+          <View className="rounded-2xl border border-[#0f2940] bg-zinc-900 p-4">
+            <Text className="text-xl font-bold text-white">Filter by date</Text>
+
+            <View className="mt-4 flex-row rounded-xl border border-[#0f2940] p-1">
+              <TouchableOpacity
+                onPress={() => setDateFilterMode('single')}
+                className={`flex-1 rounded-lg py-2 ${
+                  draftDateFilter.mode === 'single'
+                    ? 'bg-cyan-500/20'
+                    : 'bg-transparent'
+                }`}
+              >
+                <Text
+                  className={`text-center font-semibold ${
+                    draftDateFilter.mode === 'single'
+                      ? 'text-cyan-300'
+                      : 'text-zinc-400'
+                  }`}
+                >
+                  Single
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => setDateFilterMode('range')}
+                className={`flex-1 rounded-lg py-2 ${
+                  draftDateFilter.mode === 'range'
+                    ? 'bg-cyan-500/20'
+                    : 'bg-transparent'
+                }`}
+              >
+                <Text
+                  className={`text-center font-semibold ${
+                    draftDateFilter.mode === 'range'
+                      ? 'text-cyan-300'
+                      : 'text-zinc-400'
+                  }`}
+                >
+                  Range
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View className="mt-4 overflow-hidden rounded-xl border border-[#0f2940]">
+              <Calendar
+                maxDate={todayKey}
+                markedDates={markedDates}
+                markingType={calendarMarkingType}
+                onDayPress={(day: { dateString: string }) =>
+                  handleDayPress(day.dateString)
+                }
+                theme={{
+                  calendarBackground: '#18181b',
+                  monthTextColor: '#f4f4f5',
+                  dayTextColor: '#e4e4e7',
+                  textDisabledColor: '#52525b',
+                  selectedDayTextColor: '#082f49',
+                  todayTextColor: '#22d3ee',
+                  arrowColor: '#22d3ee',
+                }}
+              />
+            </View>
+
+            <View className="mt-5 flex-row items-center justify-between">
+              <TouchableOpacity
+                onPress={clearDateFilter}
+                className="rounded-lg border border-red-500/30 px-4 py-2"
+              >
+                <Text className="font-semibold text-red-400">Clear</Text>
+              </TouchableOpacity>
+
+              <View className="flex-row gap-3">
+                <TouchableOpacity
+                  onPress={closeDateModal}
+                  className="rounded-lg border border-[#0f2940] px-4 py-2"
+                >
+                  <Text className="font-semibold text-zinc-300">Cancel</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={applyDateFilter}
+                  className="rounded-lg bg-cyan-500/20 px-4 py-2"
+                >
+                  <Text className="font-semibold text-cyan-300">Apply</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }

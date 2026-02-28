@@ -125,8 +125,7 @@ function LabelScreen() {
         )}
       </View>
 
-      <View className="mt-6 w-full flex-row items-center justify-center rounded-full border border-amber-600/35 bg-amber-950/30 px-4 py-4">
-        <Feather name="alert-triangle" size={16} color="#f59e0b" />
+      <View className="mt-6 w-full flex-row items-center justify-center rounded-full border border-amber-600/35 bg-amber-950/30 px-6 py-4">
         <Text className="text-xs leading-5 font-semibold uppercase tracking-wide text-amber-500 text-center flex-1">
           Always verify your gas content with an analyzer before diving
         </Text>
@@ -154,6 +153,16 @@ function LabelScreen() {
         <Feather name="clock" size={18} color="#fff" />
         <Text className="text-white font-semibold text-lg">
           Save to History
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate('CalculatorMain' as never)}
+        className="mt-4 rounded-2xl p-4 items-center flex-row justify-center gap-2 bg-zinc-800"
+      >
+        <Feather name="activity" size={18} color="#fff" />
+        <Text className="text-white font-semibold text-lg">
+          Back to Calculator
         </Text>
       </TouchableOpacity>
     </View>

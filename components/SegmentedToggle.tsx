@@ -28,7 +28,7 @@ function SegmentedToggle<T extends string | number>({
               Haptics.selectionAsync();
               onChange(opt.value);
             }}
-            className={`flex-1 py-3 rounded-lg ${active ? 'bg-[#167b9c]/80' : ''}`}
+            className={`flex-1 py-3 rounded-lg ${active ? 'bg-[#0493c6]' : ''}`}
           >
             <Text
               className={`text-center text-sm font-bold ${active ? 'text-white' : 'text-zinc-400'}`}

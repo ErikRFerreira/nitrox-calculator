@@ -40,7 +40,7 @@ function LearnScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1" edges={['top']}>
       <LearnTopBar navTitle={NAV_TITLE} progressWidth={progressWidth} />
 
       <ScrollView
@@ -48,7 +48,7 @@ function LearnScreen() {
         contentContainerStyle={{
           paddingHorizontal: 16,
           paddingTop: 20,
-          paddingBottom: 0,
+          paddingBottom: 60,
         }}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}

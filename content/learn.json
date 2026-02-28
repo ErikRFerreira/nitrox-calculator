@@ -37,11 +37,6 @@
                 "Always analyze the cylinder yourself and label it clearly before the dive.",
                 "Plan depth based on MOD, not on how you feel."
               ]
-            },
-            {
-              "type": "image",
-              "asset": "learn_ndl_comparison.png",
-              "caption": "Conceptual comparison: reduced nitrogen exposure can increase NDL at some depths."
             }
           ]
         },
@@ -121,11 +116,6 @@
             {
               "type": "text",
               "content": "On ascent, ambient pressure decreases and tissues off-gas. Ascend and decompress according to your training and the plan."
-            },
-            {
-              "type": "image",
-              "asset": "learn_tissue_loading.png",
-              "caption": "Conceptual tissue loading: on-gassing at depth and off-gassing on ascent."
             },
             {
               "type": "warning",
@@ -435,11 +425,6 @@
             {
               "type": "text",
               "content": "Higher oxygen fractions increase fire risk and require oxygen-compatible procedures and equipment. A common threshold discussed in training is above 40% oxygen."
-            },
-            {
-              "type": "image",
-              "asset": "learn_o2_clean_tag.png",
-              "caption": "Example: an O₂-clean tag/label used to indicate oxygen service compatibility."
             },
             {
               "type": "warning",

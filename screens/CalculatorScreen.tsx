@@ -72,7 +72,7 @@ function CalculatorScreen() {
       contentContainerStyle={{ flexGrow: 1, padding: 24, paddingBottom: 40 }}
       showsVerticalScrollIndicator={false}
     >
-      <View className="bg-[#1c1f22]/20 border border-[#0f1113] p-3 rounded-xl mx-[-12px] flex flex-col gap-4">
+      <View className="bg-[#1c1f22]/20 border border-[#0f1113] p-3 rounded-xl flex flex-col gap-4">
         <SegmentedToggle
           options={[
             { label: 'ppO2 1.4', value: 1.4 },
