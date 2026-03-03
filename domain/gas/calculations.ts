@@ -33,6 +33,7 @@ export function calculateEND(mix: GasMix, depthMeters: number): number {
   if (fn2 < 0) return 0;
 
   const pressure = depthMeters / 10 + 1; // ATA
+  // Nitrogen-only narcotic model: oxygen is not treated as narcotic in this app.
   const narcoticPressureEquivalent = (fn2 / 0.79) * pressure;
 
   const endMeters = (narcoticPressureEquivalent - 1) * 10;

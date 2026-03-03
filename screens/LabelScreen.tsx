@@ -1,20 +1,46 @@
 import { Feather } from '@expo/vector-icons';
-import { RouteProp, useRoute } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
-import { Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import {
+  CompositeNavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useState } from 'react';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
 
+import { RootTabParamList } from '../app/AppNavigation';
 import { CalculatorStackParamList } from '../app/CalculatorStack';
 import { addHistoryEntry } from '../storage/historyStorage';
 import { useSettings } from '../storage/useSettings';
 import { formatDepth } from '../utils/units';
 
 type LabelRoute = RouteProp<CalculatorStackParamList, 'Label'>;
+type LabelNavigation = CompositeNavigationProp<
+  NativeStackNavigationProp<CalculatorStackParamList, 'Label'>,
+  BottomTabNavigationProp<RootTabParamList>
+>;
+
+function buildHistoryEntry(
+  params: CalculatorStackParamList['Label'],
+  diverName: string,
+) {
+  const now = Date.now();
+  return {
+    id: String(now),
+    createdAtMs: now,
+    diverName,
+    ...params,
+  };
+}
+
 function LabelScreen() {
   const { settings } = useSettings();
   const route = useRoute<LabelRoute>();
   const { o2, he, ppO2, modMeters, endMeters } = route.params;
-  const navigation = useNavigation();
+  const navigation = useNavigation<LabelNavigation>();
+  const [isSaving, setIsSaving] = useState(false);
   const diverName = settings.userName || 'Your Name';
   const formattedMod =
     modMeters !== undefined ? formatDepth(modMeters, settings.units) : null;
@@ -133,31 +159,36 @@ function LabelScreen() {
 
       <TouchableOpacity
         onPress={async () => {
-          const entry = {
-            id: String(Date.now()),
-            createdAtMs: Date.now(),
-            diverName,
-            o2,
-            he,
-            ppO2,
-            modMeters,
-            endMeters,
-          };
+          if (isSaving) return;
 
-          await addHistoryEntry(entry);
-
-          navigation.navigate('History' as never);
+          setIsSaving(true);
+          try {
+            const entry = buildHistoryEntry(
+              { o2, he, ppO2, modMeters, endMeters },
+              diverName,
+            );
+            await addHistoryEntry(entry);
+            navigation.navigate('History');
+          } catch {
+            Alert.alert('Save failed', 'Unable to save this entry. Please try again.');
+          } finally {
+            setIsSaving(false);
+          }
         }}
-        className="bg-[#0493c6]/80 mt-6 rounded-2xl p-4 items-center flex-row justify-center gap-2"
+        disabled={isSaving}
+        className={`mt-6 rounded-2xl p-4 items-center flex-row justify-center gap-2 ${
+          isSaving ? 'bg-zinc-800' : 'bg-[#0493c6]/80'
+        }`}
       >
         <Feather name="clock" size={18} color="#fff" />
         <Text className="text-white font-semibold text-lg">
-          Save to History
+          {isSaving ? 'Saving...' : 'Save to History'}
         </Text>
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate('CalculatorMain' as never)}
+        onPress={() => navigation.navigate('CalculatorMain')}
+        disabled={isSaving}
         className="mt-4 rounded-2xl p-4 items-center flex-row justify-center gap-2 bg-zinc-800"
       >
         <Feather name="activity" size={18} color="#fff" />

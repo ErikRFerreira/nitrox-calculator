@@ -1,22 +1,26 @@
 import { Feather } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import {
+  DefaultTheme,
+  NavigationContainer,
+  NavigatorScreenParams,
+} from '@react-navigation/native';
 
 // Screens
 import HistoryScreen from '../screens/HistoryScreen';
 import LearnScreen from '../screens/LearnScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 // Stacks
-import CalculatorStack from './CalculatorStack';
+import CalculatorStack, { CalculatorStackParamList } from './CalculatorStack';
 
-export type RootStackParamList = {
-  Calculator: undefined;
+export type RootTabParamList = {
+  Calculator: NavigatorScreenParams<CalculatorStackParamList> | undefined;
   History: undefined;
   Learn: undefined;
   Settings: undefined;
 };
 
-const Tab = createBottomTabNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator<RootTabParamList>();
 
 const AppTheme = {
   ...DefaultTheme,

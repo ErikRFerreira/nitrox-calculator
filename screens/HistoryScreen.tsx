@@ -230,7 +230,7 @@ function HistoryScreen() {
   };
 
   return (
-    <View className="flex-1 px-2 pb-4 pt-10">
+    <View className="flex-1 px-4 pb-4 pt-10">
       <Text className="text-center text-2xl font-bold mt-2 text-white">
         History
       </Text>
@@ -244,7 +244,7 @@ function HistoryScreen() {
 
         <TouchableOpacity
           onPress={openDateModal}
-          className={`mb-2 flex-row items-center rounded-full border px-3 py-2 mr-2 ${
+          className={`mb-2 flex-row items-center rounded-full border px-3 py-2 ${
             isDateFilterActive
               ? 'border-cyan-400 bg-cyan-400/10'
               : 'border-[#0f2940] bg-zinc-900/50'

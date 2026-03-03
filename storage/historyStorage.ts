@@ -3,10 +3,31 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { HistoryEntry } from './types';
 
 const KEY = 'history:v1';
+let writeQueue: Promise<void> = Promise.resolve();
 
 type RawHistoryEntry = Omit<HistoryEntry, 'createdAtMs'> & {
   createdAtMs?: number;
 };
+
+function enqueueWrite(work: () => Promise<void>): Promise<void> {
+  const run = writeQueue.then(work, work);
+  writeQueue = run.catch(() => undefined);
+  return run;
+}
+
+function isRawHistoryEntry(value: unknown): value is RawHistoryEntry {
+  if (typeof value !== 'object' || value === null) return false;
+
+  const v = value as Record<string, unknown>;
+  return (
+    typeof v.id === 'string' &&
+    typeof v.diverName === 'string' &&
+    typeof v.o2 === 'number' &&
+    Number.isFinite(v.o2) &&
+    typeof v.he === 'number' &&
+    Number.isFinite(v.he)
+  );
+}
 
 function parseLegacyDate(dateString?: string): number | null {
   if (!dateString) return null;
@@ -52,14 +73,26 @@ export async function getHistory(): Promise<HistoryEntry[]> {
   const raw = await AsyncStorage.getItem(KEY);
   if (!raw) return [];
 
-  const parsed = JSON.parse(raw) as RawHistoryEntry[];
+  let parsedUnknown: unknown;
+  try {
+    parsedUnknown = JSON.parse(raw);
+  } catch {
+    await AsyncStorage.removeItem(KEY);
+    return [];
+  }
+
+  if (!Array.isArray(parsedUnknown)) {
+    await AsyncStorage.removeItem(KEY);
+    return [];
+  }
+
+  const parsed = parsedUnknown.filter(isRawHistoryEntry);
   const normalized = parsed.map(normalizeEntry);
   normalized.sort((a, b) => b.createdAtMs - a.createdAtMs);
 
-  const needsMigration = normalized.some((entry, index) => {
-    const original = parsed[index];
-    return original.createdAtMs !== entry.createdAtMs;
-  });
+  const needsMigration =
+    parsed.length !== parsedUnknown.length ||
+    JSON.stringify(parsed) !== JSON.stringify(normalized);
 
   if (needsMigration) {
     await AsyncStorage.setItem(KEY, JSON.stringify(normalized));
@@ -74,9 +107,11 @@ export async function getHistory(): Promise<HistoryEntry[]> {
  * @param entry - The HistoryEntry object to be added to the history. This should include all relevant details such as gas mix, MOD, END, and any optional notes or diver name.
  */
 export async function addHistoryEntry(entry: HistoryEntry): Promise<void> {
-  const existing = await getHistory();
-  const next = [entry, ...existing]; // newest first
-  await AsyncStorage.setItem(KEY, JSON.stringify(next));
+  await enqueueWrite(async () => {
+    const existing = await getHistory();
+    const next = [entry, ...existing]; // newest first
+    await AsyncStorage.setItem(KEY, JSON.stringify(next));
+  });
 }
 
 /**
@@ -85,9 +120,11 @@ export async function addHistoryEntry(entry: HistoryEntry): Promise<void> {
  * @param id - The unique identifier of the history entry to be deleted. This should correspond to the 'id' property of the HistoryEntry object that was previously added to the history.
  */
 export async function deleteHistoryEntry(id: string): Promise<void> {
-  const existing = await getHistory();
-  const next = existing.filter((e) => e.id !== id);
-  await AsyncStorage.setItem(KEY, JSON.stringify(next));
+  await enqueueWrite(async () => {
+    const existing = await getHistory();
+    const next = existing.filter((e) => e.id !== id);
+    await AsyncStorage.setItem(KEY, JSON.stringify(next));
+  });
 }
 
 /**
@@ -95,5 +132,7 @@ export async function deleteHistoryEntry(id: string): Promise<void> {
  *
  */
 export async function clearHistory(): Promise<void> {
-  await AsyncStorage.removeItem(KEY);
+  await enqueueWrite(async () => {
+    await AsyncStorage.removeItem(KEY);
+  });
 }

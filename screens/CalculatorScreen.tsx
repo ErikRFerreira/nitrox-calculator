@@ -107,7 +107,7 @@ function CalculatorScreen() {
           label="Oxygen (O2)"
           value={o2}
           onChange={setO2Safe}
-          min={21}
+          min={isTrimix ? 10 : 21}
           max={100}
         />
 
@@ -130,7 +130,6 @@ function CalculatorScreen() {
       <SwitchCard
         isTrimix={isTrimix}
         setIsTrimix={handleSetIsTrimix}
-        setHe={setHeSafe}
       />
 
       {isTrimix && (

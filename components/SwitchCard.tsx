@@ -4,13 +4,12 @@ import { Switch, Text, View } from 'react-native';
 type Props = {
   isTrimix: boolean;
   setIsTrimix: (isTrimix: boolean) => void;
-  setHe: (he: number) => void;
 };
 
-function SwitchCard({ isTrimix, setIsTrimix, setHe }: Props) {
+function SwitchCard({ isTrimix, setIsTrimix }: Props) {
   return (
     <View
-      className={`mt-6 flex-row items-center justify-between rounded-2xl border px-5 ${
+      className={`mt-5 flex-row items-center justify-between rounded-2xl border px-5 ${
         isTrimix
           ? 'border-[#0b2743] bg-[#08101d]'
           : 'border-[#001526]/80 bg-[#02070d]/95'
@@ -38,7 +37,6 @@ function SwitchCard({ isTrimix, setIsTrimix, setHe }: Props) {
         onValueChange={(next) => {
           setIsTrimix(next);
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-          if (!next) setHe(0); // key: returning to Nitrox
         }}
       />
     </View>

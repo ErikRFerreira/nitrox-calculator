@@ -6,6 +6,14 @@ import renderer, {
 } from 'react-test-renderer';
 import MODview from '../components/MODview';
 
+jest.mock('@expo/vector-icons', () => ({
+  Feather: 'Feather',
+}));
+
+jest.mock('expo-linear-gradient', () => ({
+  LinearGradient: 'LinearGradient',
+}));
+
 jest.mock('react-native-reanimated', () => {
   const Reanimated = require('react-native-reanimated/mock');
   Reanimated.default.call = () => {};

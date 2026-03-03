@@ -125,11 +125,11 @@
         },
         {
           "id": "narcosis",
-          "title": "Gas Narcosis (Nitrogen & Oxygen)",
+          "title": "Gas Narcosis (Nitrogen model)",
           "blocks": [
             {
               "type": "text",
-              "content": "Narcosis is a reversible impairment that can occur at depth. Nitrogen is a primary contributor. Many technical diving models also treat oxygen as narcotic, while helium is considered minimally narcotic."
+              "content": "Narcosis is a reversible impairment that can occur at depth. Nitrogen is a primary contributor. This app uses a nitrogen-only END model, while helium is considered minimally narcotic."
             },
             {
               "type": "text",
@@ -334,15 +334,15 @@
           "blocks": [
             {
               "type": "text",
-              "content": "A common modern approach treats both nitrogen and oxygen as narcotic, while helium is considered minimally narcotic."
+              "content": "This app models nitrogen as narcotic and helium as minimally narcotic."
             },
             {
               "type": "formula",
-              "content": "END = [(((FN2 + FO2) / 0.79) × (Depth + 10)) − 10]"
+              "content": "END = [((FN2 / 0.79) × (Depth + 10)) − 10]"
             },
             {
               "type": "text",
-              "content": "Different communities and agencies may use different assumptions (e.g., oxygen narcotic or not). Use the approach taught in your training."
+              "content": "Different communities and agencies may use different assumptions. Use the approach taught in your training."
             }
           ]
         },

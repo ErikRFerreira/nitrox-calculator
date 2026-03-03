@@ -50,7 +50,7 @@ describe('LearnScreen', () => {
     expect(text).toContain('Nitrox Knowledge Base');
     expect(text).toContain('Gas Fundamentals');
     expect(text).toContain('Why use Nitrox?');
-    expect(text).toContain('This content is educational reinforcement');
+    expect(text).toContain('This content reinforces gas theory concepts');
   });
 
   test('renders all block types expanded by default with no details button', async () => {
@@ -61,11 +61,10 @@ describe('LearnScreen', () => {
     });
 
     const text = collectText(tree!.toJSON() as ReactTestRendererJSON);
-    expect(text).toContain('P_total = P_O2 + P_N2 + P_He');
-    expect(text).toContain('Nitrox does not make you "immune"');
+    expect(text).toContain('P_total = PP_O2 + PP_N2 + PP_He');
+    expect(text).toContain('Nitrox does not make you immune');
     expect(text).toContain('Practical takeaways');
     expect(text).toContain('Use Nitrox to manage nitrogen exposure');
-    expect(text).toContain('Conceptual comparison: reduced nitrogen exposure');
     expect(text).not.toContain('Details');
     expect(text).not.toContain('Show more');
     expect(text).not.toContain('Hide');
