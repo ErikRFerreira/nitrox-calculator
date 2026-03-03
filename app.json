@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "MOD Calculator",
-    "slug": "modcalculator",
+    "slug": "nitrox-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#0b0c0e"
+      "backgroundColor": "#081117"
     },
     "ios": {
       "supportsTablet": true
@@ -18,7 +18,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#09090b"
+        "backgroundColor": "#081117"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
@@ -32,6 +32,7 @@
       "eas": {
         "projectId": "1fda320a-5385-4142-a16a-45b2f0444826"
       }
-    }
+    },
+    "owner": "erikrferreira"
   }
 }
