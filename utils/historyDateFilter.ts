@@ -22,7 +22,11 @@ function parseDateKey(dateKey: string): {
   const month = Number(parts[1]);
   const day = Number(parts[2]);
 
-  if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) {
+  if (
+    !Number.isInteger(year) ||
+    !Number.isInteger(month) ||
+    !Number.isInteger(day)
+  ) {
     return null;
   }
 
@@ -59,7 +63,10 @@ export function endOfLocalDayMs(dateKey: string): number {
   return startOfLocalDayMs(dateKey) + 86_399_999;
 }
 
-export function isEntryInDateFilter(entryMs: number, filter: DateFilter): boolean {
+export function isEntryInDateFilter(
+  entryMs: number,
+  filter: DateFilter,
+): boolean {
   if (!filter.startDate) return true;
 
   if (filter.mode === 'single' || !filter.endDate) {
@@ -68,12 +75,10 @@ export function isEntryInDateFilter(entryMs: number, filter: DateFilter): boolea
     return entryMs >= start && entryMs <= end;
   }
 
-  const startKey = filter.startDate <= filter.endDate
-    ? filter.startDate
-    : filter.endDate;
-  const endKey = filter.startDate <= filter.endDate
-    ? filter.endDate
-    : filter.startDate;
+  const startKey =
+    filter.startDate <= filter.endDate ? filter.startDate : filter.endDate;
+  const endKey =
+    filter.startDate <= filter.endDate ? filter.endDate : filter.startDate;
 
   const start = startOfLocalDayMs(startKey);
   const end = endOfLocalDayMs(endKey);
@@ -143,7 +148,7 @@ export function formatDateFilterLabel(filter: DateFilter): string | null {
   const formatter = new Intl.DateTimeFormat('en-US', {
     month: 'short',
     day: 'numeric',
-    year: 'numeric',
+    year: '2-digit',
   });
 
   if (filter.mode === 'single' || !filter.endDate) {
@@ -166,12 +171,10 @@ export function buildMarkedDates(filter: DateFilter): Record<string, object> {
     };
   }
 
-  const startKey = filter.startDate <= filter.endDate
-    ? filter.startDate
-    : filter.endDate;
-  const endKey = filter.startDate <= filter.endDate
-    ? filter.endDate
-    : filter.startDate;
+  const startKey =
+    filter.startDate <= filter.endDate ? filter.startDate : filter.endDate;
+  const endKey =
+    filter.startDate <= filter.endDate ? filter.endDate : filter.startDate;
 
   const marked: Record<string, object> = {};
   const cursor = new Date(startOfLocalDayMs(startKey));

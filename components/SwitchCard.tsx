@@ -9,7 +9,7 @@ type Props = {
 function SwitchCard({ isTrimix, setIsTrimix }: Props) {
   return (
     <View
-      className={`mt-5 flex-row items-center justify-between rounded-2xl border px-5 ${
+      className={`mt-5 flex-row items-center justify-between rounded-2xl border ${
         isTrimix
           ? 'border-[#0b2743] bg-[#08101d]'
           : 'border-[#001526]/80 bg-[#02070d]/95'
@@ -23,7 +23,7 @@ function SwitchCard({ isTrimix, setIsTrimix }: Props) {
       }}
     >
       <View>
-        <Text className=" text-zinc-500 text-xs font-bold uppercase tracking-[2px]">
+        <Text className=" text-zinc-500 text-xs font-bold uppercase tracking-[2px] px-5">
           Trimix Mode
         </Text>
       </View>
