@@ -20,8 +20,6 @@ import { calculateScrollProgress } from '../utils/scrollProgress';
 const content = parseLearnContent(learnContent);
 const NAV_TITLE = 'Learn';
 const HERO_TITLE = 'Nitrox Knowledge Base';
-const HERO_DESCRIPTION =
-  'Key gas planning concepts and operational practices, organized for fast review before or after dives.';
 
 function LearnScreen() {
   const [scrollY, setScrollY] = useState(0);
@@ -56,7 +54,7 @@ function LearnScreen() {
         onLayout={(event) => setViewportHeight(event.nativeEvent.layout.height)}
         onContentSizeChange={(_, height) => setContentHeight(height)}
       >
-        <LearnHeroIntro title={HERO_TITLE} description={HERO_DESCRIPTION} />
+        <LearnHeroIntro title={HERO_TITLE} />
 
         {content.categories.map((category) => (
           <View key={category.id}>
