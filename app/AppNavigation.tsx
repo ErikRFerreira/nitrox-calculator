@@ -36,7 +36,6 @@ function AppNavigation() {
       <Tab.Navigator
         screenOptions={{
           headerShown: false,
-          sceneStyle: { backgroundColor: 'transparent' },
           tabBarStyle: {
             backgroundColor: '#09090b',
             borderTopColor: '#18181b',

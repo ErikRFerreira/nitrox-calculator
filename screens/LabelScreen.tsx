@@ -36,7 +36,7 @@ function buildHistoryEntry(
 }
 
 function LabelScreen() {
-  const { settings } = useSettings();
+  const { settings } = useSettings({ refreshOnFocus: false });
   const route = useRoute<LabelRoute>();
   const { o2, he, ppO2, modMeters, endMeters } = route.params;
   const navigation = useNavigation<LabelNavigation>();
@@ -63,7 +63,7 @@ function LabelScreen() {
   }
 
   return (
-    <View className="flex-1 p-6">
+    <View className="flex-1 bg-zinc-950 p-6">
       <View className="mt-4 mb-6 flex-row items-center justify-between">
         {/* Left: Feather icon */}
         <View style={{ width: 40, alignItems: 'flex-start' }}>
@@ -187,7 +187,7 @@ function LabelScreen() {
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate('CalculatorMain')}
+        onPress={() => navigation.goBack()}
         disabled={isSaving}
         className="mt-4 rounded-2xl p-4 items-center flex-row justify-center gap-2 bg-zinc-800"
       >

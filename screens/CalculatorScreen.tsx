@@ -28,7 +28,7 @@ type Nav = NativeStackNavigationProp<
 
 function CalculatorScreen() {
   const navigation = useNavigation<Nav>();
-  const { settings } = useSettings();
+  const { settings } = useSettings({ refreshOnFocus: false });
   const [o2, setO2] = useState(DEFAULT_O2);
   const [he, setHe] = useState(DEFAULT_HE);
   const [ppO2, setPpO2] = useState(DEFAULT_PPO2);
@@ -68,7 +68,7 @@ function CalculatorScreen() {
 
   return (
     <ScrollView
-      className="flex-1 pt-6"
+      className="flex-1 bg-zinc-950 pt-6"
       contentContainerStyle={{ flexGrow: 1, padding: 24, paddingBottom: 40 }}
       showsVerticalScrollIndicator={false}
     >

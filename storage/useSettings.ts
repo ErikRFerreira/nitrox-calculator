@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 
 import {
@@ -8,21 +8,43 @@ import {
   Settings,
 } from './settingsStorage';
 
-export function useSettings() {
-  const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
+type UseSettingsOptions = {
+  refreshOnFocus?: boolean;
+};
 
-  const refresh = useCallback(async () => {
+export function useSettings(options: UseSettingsOptions = {}) {
+  const { refreshOnFocus = true } = options;
+  const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
+  const hasLoadedOnMountRef = useRef(false);
+
+  const loadSettings = useCallback(async () => {
     const next = await getSettings();
     setSettings(next);
   }, []);
+
+  const refresh = useCallback(async () => {
+    await loadSettings();
+  }, [loadSettings]);
 
   const updateSettings = useCallback(async (next: Settings) => {
     setSettings(next);
     await saveSettings(next);
   }, []);
 
+  useEffect(() => {
+    const run = async () => {
+      await loadSettings();
+      hasLoadedOnMountRef.current = true;
+    };
+
+    void run();
+  }, [loadSettings]);
+
   useFocusEffect(
     useCallback(() => {
+      if (!refreshOnFocus) return;
+      if (!hasLoadedOnMountRef.current) return;
+
       let isActive = true;
 
       const load = async () => {
@@ -37,7 +59,7 @@ export function useSettings() {
       return () => {
         isActive = false;
       };
-    }, []),
+    }, [refreshOnFocus]),
   );
 
   return { settings, refresh, updateSettings };
